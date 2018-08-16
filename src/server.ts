@@ -4,10 +4,10 @@ import {api} from './api'
 import {authenticate, security} from './security'
 const app = express()
 
+app.use(security)
 app.use('/api', authenticate, api)
 app.use(express.static('web/dist'))
 app.use(express.static('static'))
-app.use(security)
 app.get('*', (req, res) => {
     res.sendFile(`${cwd()}/static/index.html`)
 })
