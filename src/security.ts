@@ -50,14 +50,13 @@ passport.use(new LocalStrategy((username, password, done) => {
         .catch((error) => done(error))
 }))
 
-security.post('/login', bodyParser.urlencoded({
-        extended: true
-    }),
-    passport.authenticate('local', {
-        successRedirect: '/',
-        failureRedirect: '/login'
-    })
-)
+security.use(bodyParser.urlencoded({
+    extended: true
+}))
+
+security.use(bodyParser.json())
+
+security.post('/login', passport.authenticate('local', {}), (req, res) => res.send())
 
 passport.serializeUser((user: User, done) => {
     done(null, user.username)
