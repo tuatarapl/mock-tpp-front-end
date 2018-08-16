@@ -32,12 +32,16 @@ function lookupUser(username): Promise < InternalUser > {
     return user ? Promise.resolve(user) : Promise.reject()
 }
 
+function mapUser({username}: InternalUser): User {
+    return {
+        username
+    }
+}
+
 function login(username, password): Promise < User | boolean > {
     return lookupUser(username).then((user) => {
         if (user && user.password === password) {
-            return {
-                username
-            }
+            return mapUser(user)
         } else {
             return false
         }
@@ -50,13 +54,17 @@ passport.use(new LocalStrategy((username, password, done) => {
         .catch((error) => done(error))
 }))
 
+export const authenticate = (req, res, next) => req.user ? next() : res.status(401).send()
+
+security.get('/user', authenticate, (req, res) => res.send(req.user))
+
 security.use(bodyParser.urlencoded({
     extended: true
 }))
 
 security.use(bodyParser.json())
 
-security.post('/login', passport.authenticate('local', {}), (req, res) => res.send())
+security.post('/login', passport.authenticate('local', {}), (req, res) => res.send(req.user))
 
 passport.serializeUser((user: User, done) => {
     done(null, user.username)
@@ -64,8 +72,6 @@ passport.serializeUser((user: User, done) => {
 
 passport.deserializeUser((id, done) => {
     lookupUser(id)
-        .then((user) => done(null, user))
+        .then((user) => done(null, mapUser(user)))
         .catch((error) => done(error))
 })
-
-export const authenticate = passport.authenticate('local')
