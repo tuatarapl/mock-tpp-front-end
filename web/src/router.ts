@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
-import { login } from './routes/login'
+import { login, loginGuard } from './routes/login'
 Vue.use(VueRouter)
 const routes: RouteConfig[] = [{
   name: 'main',
@@ -41,4 +41,5 @@ const router = new VueRouter({
   linkActiveClass: 'active'
 })
 
+router.beforeEach(loginGuard)
 export default router
