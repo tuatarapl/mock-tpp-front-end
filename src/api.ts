@@ -1,7 +1,9 @@
+import axios from 'axios'
 import {Router} from 'express'
-
 export const api = Router()
 
 api.get('/aspsps', (req, res) => {
-    res.send([{name: 'a', id: '1'}, {name: 'b', id: '2'}])
+    axios.get('/metadata/aspsps', {baseURL: 'http://localhost:3000'})
+    .then(({data}) => res.send(data))
+    .catch((error) => res.status(500).send())
 })
