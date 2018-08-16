@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
+import { aspsps } from './routes/aspsps'
 import { login, loginGuard } from './routes/login'
 Vue.use(VueRouter)
 const routes: RouteConfig[] = [{
@@ -17,13 +18,7 @@ const routes: RouteConfig[] = [{
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                   <li class="nav-item active">
-                      <router-link  :to="{ name: 'accounts'}" class="nav-link" >Accounts</router-link>
-                  </li>
-                  <li class="nav-item active">
-                      <router-link  :to="{ name: 'transactions'}" class="nav-link" >Transactions</router-link>
-                  </li>
-                  <li class="nav-item active">
-                      <router-link  :to="{ name: 'settings'}" class="nav-link" >Settings</router-link>
+                      <router-link  :to="{ name: 'aspsps'}" class="nav-link" >ASPSPS</router-link>
                   </li>
                 </ul>
             </div>
@@ -32,6 +27,7 @@ const routes: RouteConfig[] = [{
       </div>`
   },
   children: [
+    aspsps
   ]
 }, login]
 
