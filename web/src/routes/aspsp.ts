@@ -27,6 +27,7 @@ export const aspsp: RouteConfig = {
                 </div>
                 <button type="button" class="btn btn-primary" @click="doRequestConsent()">Request</button>
             </form>
+            <h2>Consent requests</h2>
             <ul class="list-group">
                 <li class="list-group-item" v-for="request in aspsp.requests">
                     <h3>{{request.requestId}} <span class="badge badge-primary">{{request.status}}</span></h3>
@@ -59,7 +60,7 @@ export const aspsp: RouteConfig = {
       },
       methods: {
           doRequestConsent() {
-            requestConsent(this.aspsp.id, this.kind)
+            requestConsent(this.aspsp.id, this.kind).then((request) => this.aspsp.requests.push(request))
           }
       }
     })
