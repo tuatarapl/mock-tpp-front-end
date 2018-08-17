@@ -27,6 +27,16 @@ export const aspsp: RouteConfig = {
                 </div>
                 <button type="button" class="btn btn-primary" @click="doRequestConsent()">Request</button>
             </form>
+            <ul class="list-group">
+                <li class="list-group-item" v-for="request in aspsp.requests">
+                    <h3>{{request.requestId}} <span class="badge badge-primary">{{request.status}}</span></h3>
+                    <ul class="list-group">
+                        <li class="list-group-item" v-for="action in request.actions">
+                            <a :href="action.uri" target="_blank">Redirect</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
         </div>
       </div>
       `,
