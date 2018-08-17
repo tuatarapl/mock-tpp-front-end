@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
+import { aspsp } from './routes/aspsp'
 import { aspsps } from './routes/aspsps'
 import { login, loginGuard } from './routes/login'
 Vue.use(VueRouter)
@@ -27,7 +28,8 @@ const routes: RouteConfig[] = [{
       </div>`
   },
   children: [
-    aspsps
+    aspsps,
+    aspsp
   ]
 }, login]
 
