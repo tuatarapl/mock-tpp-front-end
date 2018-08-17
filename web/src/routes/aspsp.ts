@@ -6,6 +6,10 @@ function get(id) {
     return axios.get(`/api/aspsps/${id}`).then((response) => response.data)
 }
 
+function requestConsent(id, kind) {
+    return axios.post(`/api/aspsps/${id}/request`, {kind}).then((response) => response.data)
+}
+
 export const aspsp: RouteConfig = {
     name: 'aspsp',
     path: 'aspsps/:aspspId',
@@ -14,12 +18,22 @@ export const aspsp: RouteConfig = {
       <div class="row>
         <div class="col-12>
             <h1>{{aspsp.name}}</h1>
+            <form class="form-group">
+                <div class="form-group">
+                    <label for="consentRequestKind">Consent request kind</label>
+                    <select class="form-control" id="consentRequestKind" v-model="kind">
+                        <option>AccountsList</option>
+                    </select>
+                </div>
+                <button type="button" class="btn btn-primary" @click="doRequestConsent()">Request</button>
+            </form>
         </div>
       </div>
       `,
       data() {
         return {
-          aspsp: null
+          aspsp: null,
+          kind: 'AccountsList'
         }
       },
       beforeRouteEnter(to, from, next) {
@@ -32,6 +46,11 @@ export const aspsp: RouteConfig = {
             this.aspsp = data
             next()
         })
+      },
+      methods: {
+          doRequestConsent() {
+            requestConsent(this.aspsp.id, this.kind)
+          }
       }
     })
   }
