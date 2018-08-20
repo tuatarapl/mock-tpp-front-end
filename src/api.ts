@@ -11,16 +11,23 @@ api.get('/aspsps', (req, res) => {
 
 api.get('/aspsps/:aspspId', (req, res) => {
     const aspspId = req.params.aspspId
+    const token = Buffer.from(JSON.stringify(req.user.username), 'UTF-8').toString('BAse64')
     Promise.all([
         axios.get(`/metadata/aspsps/${aspspId}`, {baseURL: 'http://localhost:3000'}),
         axios.get(`/consent/internal/request/${aspspId}`, {
             baseURL: 'http://localhost:3000',
             headers: {
-                authorization: `Bearer ${Buffer.from(JSON.stringify(req.user.username), 'UTF-8').toString('BAse64')}`
+                authorization: `Bearer ${token}`
+            }
+        }),
+        axios.get(`/consent/internal/${aspspId}`, {
+            baseURL: 'http://localhost:3000',
+            headers: {
+                authorization: `Bearer ${token}`
             }
         })
     ])
-    .then(([{data: metadata}, {data: requests}]) => res.send({...metadata, requests}))
+    .then(([{data: metadata}, {data: requests}, {data: consent}]) => res.send({...metadata, requests,consent}))
     .catch((error) => res.status(500).send())
 })
 
