@@ -39,3 +39,12 @@ api.post('/aspsps/:aspspId/request', json(), (req, res) => {
     .then(({data}) => res.send(data))
     .catch((error) => res.status(500).send())
 })
+
+api.post('/aspsps/:aspspId/call', json(), (req, res) => {
+    const aspspId = req.params.aspspId
+    const {kind} = req.body
+    axios.post('/query/internal/accountsList', {kind, aspspId, psuId: req.user.username},
+        {baseURL: 'http://localhost:3000'})
+    .then(({data}) => res.send(data))
+    .catch((error) => res.status(500).send())
+})

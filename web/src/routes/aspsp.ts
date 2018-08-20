@@ -10,6 +10,10 @@ function requestConsent(id, kind) {
     return axios.post(`/api/aspsps/${id}/request`, {kind}).then((response) => response.data)
 }
 
+function callAPI(id, kind) {
+    return axios.post(`/api/aspsps/${id}/call`, {kind}).then((response) => response.data)
+}
+
 export const aspsp: RouteConfig = {
     name: 'aspsp',
     path: 'aspsps/:aspspId',
@@ -26,6 +30,7 @@ export const aspsp: RouteConfig = {
                     </select>
                 </div>
                 <button type="button" class="btn btn-primary" @click="doRequestConsent()">Request</button>
+                <button type="button" class="btn btn-primary" @click="doCall()">Call</button>
             </form>
             <h2>Consent requests</h2>
             <ul class="list-group">
@@ -38,13 +43,20 @@ export const aspsp: RouteConfig = {
                     </ul>
                 </li>
             </ul>
+            <h2>Results</h2>
+            <ul>
+                <li v-for="result in results">
+                    {{result}}
+                </li>
+            </ul>
         </div>
       </div>
       `,
       data() {
         return {
           aspsp: null,
-          kind: 'AccountsList'
+          kind: 'AccountsList',
+          results: []
         }
       },
       beforeRouteEnter(to, from, next) {
@@ -61,6 +73,9 @@ export const aspsp: RouteConfig = {
       methods: {
           doRequestConsent() {
             requestConsent(this.aspsp.id, this.kind).then((request) => this.aspsp.requests.push(request))
+          },
+          doCall() {
+            callAPI(this.aspsp.id, this.kind).then((response) => this.results.push(response))
           }
       }
     })
