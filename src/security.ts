@@ -3,9 +3,13 @@ import {Router} from 'express'
 import * as session from 'express-session'
 import * as passport from 'passport'
 import {Strategy as LocalStrategy} from 'passport-local'
+import * as FileStore from 'session-file-store'
 export const security = Router()
 security.use(session({
-    secret: 'keyboard cat'
+    secret: 'keyboard cat',
+    store: new (FileStore(session))({
+        secret: 'keyboard cat'
+    })
 }))
 security.use(passport.initialize())
 security.use(passport.session())
