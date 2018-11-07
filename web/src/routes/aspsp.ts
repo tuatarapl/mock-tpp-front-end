@@ -12,8 +12,8 @@ function createSession(aspspId, kind, consent) {
     return axios.post(`/api/aspsps/${aspspId}/sessions`, {kind, consent}).then((response) => response.data)
 }
 
-function callAPI(id, kind) {
-    return axios.post(`/api/aspsps/${id}/call`, {kind}).then((response) => response.data)
+function callAPI(aspspId, operation, session, payload) {
+    return axios.post(`/api/aspsps/${aspspId}/call/${operation}`, {session, payload}).then((response) => response.data)
 }
 
 const consentTemplate = {
@@ -26,7 +26,8 @@ const consentTemplate = {
         privilegeList: [],
         consentId: 'ais-consent'
     }
-  }
+}
+const operations = ['getAccounts', 'getAccount']
 
 export const aspsp: RouteConfig = {
     name: 'aspsp',
@@ -63,10 +64,23 @@ export const aspsp: RouteConfig = {
             </form>
             <form class="form-group">
                 <div class="form-group">
-                    <label for="consentRequestKind">Consent request kind</label>
-                    <select class="form-control" id="consentRequestKind" v-model="kind">
-                        <option>AccountsList</option>
+                    <label for="operation">Operation</label>
+                    <select class="form-control" id="operation" v-model="operation">
+                        <option v-for="o in operations">{{o}}</option>
                     </select>
+                </div>
+                <div class="form-group">
+                    <label for="session">Session</label>
+                    <select class="form-control" id="session" v-model="session">
+                        <option v-for="session in aspsp.sessions">{{session.identity.sessionId}}</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="operationPayload">Payload</label>
+                    <textarea class="form-control" id="operationPayload" rows="10"
+                    v-bind:value="JSON.stringify(operationPayload,null,4)"
+                    v-on:input="setOperationPayload($event.target.value)">
+                    </textarea>
                 </div>
                 <button type="button" class="btn btn-primary" @click="doCall()">Call</button>
             </form>
@@ -82,8 +96,11 @@ export const aspsp: RouteConfig = {
       data() {
         return {
           aspsp: null,
-          kind: 'AccountsList',
+          operations,
+          operation: operations[0],
+          operationPayload: {},
           results: [],
+          session: null,
           newSessionName: '',
           newSessionConsent: _.cloneDeep(consentTemplate)
         }
@@ -101,7 +118,8 @@ export const aspsp: RouteConfig = {
       },
       methods: {
           doCall() {
-            callAPI(this.aspsp.id, this.kind).then((response) => this.results.push(response))
+            callAPI(this.aspsp.aspspId, this.operation, this.session, this.operationPayload)
+                .then((response) => this.results.push(response))
           },
           doCreateSession() {
             createSession(this.aspsp.aspspId, this.newSessionName, this.newSessionConsent).then((newSession) => {
@@ -109,6 +127,13 @@ export const aspsp: RouteConfig = {
                 this.newSessionName = '',
                 this.newSessionConsent = _.cloneDeep(consentTemplate)
             })
+          },
+          setOperationPayload(value: string) {
+              try {
+                  this.operationPayload = JSON.parse(value)
+              } catch (e) {
+                  console.warn(e)
+              }
           },
           jsonInput: _.debounce((field: string, value: string) => {
               try {
