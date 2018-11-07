@@ -22,6 +22,16 @@ export const aspsp: RouteConfig = {
       <div class="row>
         <div class="col-12>
             <h1>{{aspsp.name}}</h1>
+            <h2>Consents </h2>
+            <form class="form-group">
+                <div class="form-group">
+                    <label for="newConsentContent">Content/label>
+                    <textarea class="form-control" id="newConsentContent" v-model="newConsentContent">
+                    </textarea>
+                </div>
+                <button type="button" class="btn btn-primary" @click="doRequestConsent()">Request</button>
+                <button type="button" class="btn btn-primary" @click="doCall()">Call</button>
+            </form>
             <form class="form-group">
                 <div class="form-group">
                     <label for="consentRequestKind">Consent request kind</label>
@@ -56,7 +66,17 @@ export const aspsp: RouteConfig = {
         return {
           aspsp: null,
           kind: 'AccountsList',
-          results: []
+          results: [],
+          consent: {
+            scope: 'ais ais-accounts',
+            scope_details: {
+                throttlingPolicy: 'psd2Regulatory',
+                scopeTimeDuration: 90,
+                scopeGroupType: 'ais',
+                privilegeList: [],
+                consentId: 'ais-consent'
+            }
+          }
         }
       },
       beforeRouteEnter(to, from, next) {
