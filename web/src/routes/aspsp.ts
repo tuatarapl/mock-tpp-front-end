@@ -27,7 +27,9 @@ const consentTemplate = {
         consentId: 'ais-consent'
     }
 }
-const operations = ['getAccounts', 'getAccount']
+const operations = ['getAccounts', 'getAccount', 'getTransactionsDone', 'getTransactionsPending',
+    'getTransactionsRejected', 'getTransactionsScheduled', 'getTransactionsCancelled', 'getHolds',
+    'getTransactionDetail']
 
 export const aspsp: RouteConfig = {
     name: 'aspsp',
