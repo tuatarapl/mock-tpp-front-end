@@ -15,7 +15,7 @@ export const aspsps: RouteConfig = {
         <div class="col-12>
           <ul class="list-group">
             <li v-for="aspsp in aspsps" class="list-group-item">
-              <router-link  :to="{ name: 'aspsp',params:{aspspId:aspsp.id}}" class="nav-link" >
+              <router-link  :to="{ name: 'aspsp',params:{aspspId:aspsp.aspspId}}" class="nav-link" >
                 {{aspsp.name}}
               </router-link>
             </li>
