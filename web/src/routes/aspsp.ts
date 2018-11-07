@@ -1,4 +1,6 @@
 import axios from 'axios'
+import * as _ from 'lodash'
+import * as moment from 'moment'
 import Vue from 'vue'
 import { RouteConfig } from 'vue-router'
 
@@ -6,13 +8,25 @@ function get(id) {
     return axios.get(`/api/aspsps/${id}`).then((response) => response.data)
 }
 
-function requestConsent(id, kind) {
-    return axios.post(`/api/aspsps/${id}/request`, {kind}).then((response) => response.data)
+function createSession(aspspId, kind, consent) {
+    return axios.post(`/api/aspsps/${aspspId}/sessions`, {kind, consent}).then((response) => response.data)
 }
 
 function callAPI(id, kind) {
     return axios.post(`/api/aspsps/${id}/call`, {kind}).then((response) => response.data)
 }
+
+const consentTemplate = {
+    scope: 'ais ais-accounts',
+    scope_details: {
+        throttlingPolicy: 'psd2Regulatory',
+        scopeTimeLimit: moment().add(90, 'days').toISOString(),
+        scopeTimeDuration: 90,
+        scopeGroupType: 'ais',
+        privilegeList: [],
+        consentId: 'ais-consent'
+    }
+  }
 
 export const aspsp: RouteConfig = {
     name: 'aspsp',
@@ -22,15 +36,30 @@ export const aspsp: RouteConfig = {
       <div class="row>
         <div class="col-12>
             <h1>{{aspsp.name}}</h1>
-            <h2>Consents </h2>
+            <h2>Sessions</h2>
+            <ul class="list-group">
+                <li class="list-group-item" v-for="session in aspsp.sessions">
+                    <h3>{{session.identity.sessionId}}</h3>
+                    <ul class="list-group">
+                        <li class="list-group-item" v-for="interaction in session.interactions">
+                            <a @click="openRedirect(interaction.redirectUri)" href="#">Redirect</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
             <form class="form-group">
                 <div class="form-group">
-                    <label for="newConsentContent">Content/label>
-                    <textarea class="form-control" id="newConsentContent" v-model="newConsentContent">
+                    <label for="newSessionName">Name</label>
+                    <input type="text" class="form-control" id="newSessionName" v-model="newSessionName"/>
+                </div>
+                <div class="form-group">
+                    <label for="newSessionConsent">Consent</label>
+                    <textarea class="form-control" id="newSessionConsent" rows="10"
+                    v-bind:value="JSON.stringify(newSessionConsent,null,4)"
+                    v-on:input="jsonInput('newSessionConsent',$event.target.value)">
                     </textarea>
                 </div>
-                <button type="button" class="btn btn-primary" @click="doRequestConsent()">Request</button>
-                <button type="button" class="btn btn-primary" @click="doCall()">Call</button>
+                <button type="button" class="btn btn-primary" @click="doCreateSession()">Create</button>
             </form>
             <form class="form-group">
                 <div class="form-group">
@@ -39,20 +68,8 @@ export const aspsp: RouteConfig = {
                         <option>AccountsList</option>
                     </select>
                 </div>
-                <button type="button" class="btn btn-primary" @click="doRequestConsent()">Request</button>
                 <button type="button" class="btn btn-primary" @click="doCall()">Call</button>
             </form>
-            <h2>Consent requests</h2>
-            <ul class="list-group">
-                <li class="list-group-item" v-for="request in aspsp.requests">
-                    <h3>{{request.requestId}} <span class="badge badge-primary">{{request.status}}</span></h3>
-                    <ul class="list-group">
-                        <li class="list-group-item" v-for="action in request.actions">
-                            <a :href="action.uri" target="_blank">Redirect</a>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
             <h2>Results</h2>
             <ul>
                 <li v-for="result in results">
@@ -67,16 +84,8 @@ export const aspsp: RouteConfig = {
           aspsp: null,
           kind: 'AccountsList',
           results: [],
-          consent: {
-            scope: 'ais ais-accounts',
-            scope_details: {
-                throttlingPolicy: 'psd2Regulatory',
-                scopeTimeDuration: 90,
-                scopeGroupType: 'ais',
-                privilegeList: [],
-                consentId: 'ais-consent'
-            }
-          }
+          newSessionName: '',
+          newSessionConsent: _.cloneDeep(consentTemplate)
         }
       },
       beforeRouteEnter(to, from, next) {
@@ -91,12 +100,27 @@ export const aspsp: RouteConfig = {
         })
       },
       methods: {
-          doRequestConsent() {
-            requestConsent(this.aspsp.id, this.kind).then((request) => this.aspsp.requests.push(request))
-          },
           doCall() {
             callAPI(this.aspsp.id, this.kind).then((response) => this.results.push(response))
+          },
+          doCreateSession() {
+            createSession(this.aspsp.aspspId, this.newSessionName, this.newSessionConsent).then((newSession) => {
+                this.aspsp.sessions.push(newSession)
+                this.newSessionName = '',
+                this.newSessionConsent = _.cloneDeep(consentTemplate)
+            })
+          },
+          jsonInput: _.debounce((field: string, value: string) => {
+              try {
+              this[field] = JSON.parse(value)
+              } catch (e) {
+                  console.warn(e)
+              }
+          }, 1000),
+          openRedirect(uri: string) {
+            window.open(uri, '_blank')
           }
+
       }
     })
   }
