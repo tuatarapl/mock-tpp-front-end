@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
 import { aspsp } from './routes/aspsp'
 import { aspsps } from './routes/aspsps'
+import { callbackResult } from './routes/callback-result'
 import { login, loginGuard } from './routes/login'
 Vue.use(VueRouter)
 const routes: RouteConfig[] = [{
@@ -31,7 +32,7 @@ const routes: RouteConfig[] = [{
     aspsps,
     aspsp
   ]
-}, login]
+}, login, callbackResult]
 
 const router = new VueRouter({
   mode: 'history',
