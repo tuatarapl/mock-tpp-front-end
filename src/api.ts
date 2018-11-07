@@ -36,11 +36,17 @@ api.get('/aspsps/:aspspId', (req, res) => {
     .catch((error) => res.status(500).send(inspect(error)))
 })
 
-api.post('/aspsps/:aspspId/request', json(), (req, res) => {
+api.post('/aspsps/:aspspId/sessions', json(), (req, res) => {
     const aspspId = req.params.aspspId
-    const {kind} = req.body
-    axios.post('/consent/internal/request', {kind, aspspId, psuId: req.user.username},
-        {baseURL: 'http://localhost:3000'})
+    const {kind, consent} = req.body
+    axios.post(`/session/${kind}`, consent,
+        {
+            baseURL,
+            headers: {
+                'x-tuatara-psu-id': req.user.username,
+                'x-tuatara-aspsp-id': aspspId
+            }
+        })
     .then(({data}) => res.send(data))
     .catch((error) => res.status(500).send(inspect(error)))
 })
