@@ -51,11 +51,30 @@ api.post('/aspsps/:aspspId/sessions', json(), (req, res) => {
     .catch((error) => res.status(500).send(inspect(error)))
 })
 
-api.post('/aspsps/:aspspId/call', json(), (req, res) => {
+const operationMap = {
+    getAccounts: '/v2_1.1/accounts/v2_1.1/getAccounts',
+    getAccount: '/v2_1.1/accounts/v2_1.1/getAccount',
+    getTransactionsDone: '/v2_1.1/accounts/v2_1.1/getTransactionsDone',
+    getTransactionsPending: '/v2_1.1/accounts/v2_1.1/getTransactionsPending',
+    getTransactionsRejected: '/v2_1.1/accounts/v2_1.1/getTransactionsRejected',
+    getTransactionsScheduled: '/v2_1.1/accounts/v2_1.1/getTransactionsScheduled',
+    getTransactionsCancelled: '/v2_1.1/accounts/v2_1.1/getTransactionsCancelled',
+    getHolds: '/v2_1.1/accounts/v2_1.1/getHolds',
+    getTransactionDetail: '/v2_1.1/accounts/v2_1.1/getTransactionDetail'
+}
+
+api.post('/aspsps/:aspspId/call/:operation', json(), (req, res) => {
     const aspspId = req.params.aspspId
-    const {kind} = req.body
-    axios.post('/query/internal/accountsList', {kind, aspspId, psuId: req.user.username},
-        {baseURL: 'http://localhost:3000'})
+    const operation = req.params.operation
+    const {session, payload} = req.body
+    axios.post(`/integration${operationMap[operation]}`, payload,{
+        baseURL,
+        headers: {
+            'x-tuatara-psu-id': req.user.username,
+            'x-tuatara-aspsp-id': aspspId,
+            'x-tuatara-session-id': session
+        }
+    })
     .then(({data}) => res.send(data))
     .catch((error) => res.status(500).send(inspect(error)))
 })
