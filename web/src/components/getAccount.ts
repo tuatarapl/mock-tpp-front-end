@@ -22,9 +22,7 @@ Vue.component('get-account-result', {
         <dd class="col-sm-9 col-md-2">{{data.account.currency}}</dd>
 
         <dt class="col-sm-3 col-md-2">Account Type</dt>
-        <dd class="col-sm-9 col-md-4">
-            {{data.account.accountType.description}} ({{data.account.accountType.code}})
-        </dd>
+        <dd class="col-sm-9 col-md-4"><dictionary-item :item="data.account.accountType"></dictionary-item></dd>
 
         <dt class="col-sm-3 col-md-2">Account Type Name</dt>
         <dd class="col-sm-9 col-md-4">{{data.account.accountTypeName}}</dd>
@@ -33,44 +31,12 @@ Vue.component('get-account-result', {
         <dd class="col-sm-9 col-md-4">{{data.account.accountHolderType}}</dd>
 
         <dt class="col-sm-3 col-md-2">Name Address</dt>
-        <dd class="col-sm-9 col-md-4">
-            <ul class="list-unstyled">
-                <li v-for="line in data.account.nameAddress.value">{{line}}</li>
-            </ul>
-        </dd>
+        <dd class="col-sm-9 col-md-4"><name-address :data="data.account.nameAddress"></name-address></dd>
 
         <dt class="col-sm-3 col-md-2">Bank</dt>
-        <dd class="col-sm-9 col-md-10">
-            <dl class="row">
-                <dt class="col-sm-3 col-md-2">Name</dt>
-                <dd class="col-sm-9 col-md-4">{{data.account.bank.name}}</dd>
-
-                <dt class="col-sm-3 col-md-2">Address</dt>
-                <dd class="col-sm-9 col-md-4">
-                    <ul class="list-unstyled">
-                        <li v-for="line in data.account.bank.address">{{line}}</li>
-                    </ul>
-                </dd>
-
-                <dt class="col-sm-3 col-md-2">Bic or SWIFT</dt>
-                <dd class="col-sm-9 col-md-2">{{data.account.bank.bicOrSwift}}</dd>
-
-                <dt class="col-sm-3 col-md-2">Code</dt>
-                <dd class="col-sm-9 col-md-2">{{data.account.bank.code}}</dd>
-
-                <dt class="col-sm-3 col-md-2">Country Code</dt>
-                <dd class="col-sm-9 col-md-2">{{data.account.bank.countryCode}}</dd>
-            </dl>
-        </dd>
+        <dd class="col-sm-9 col-md-10"><bank-data :bank="data.account.bank"></bank-data></dd>
         <dt class="col-sm-3 col-md-2">Additional Data</dt>
-        <dd class="col-sm-9 col-md-10">
-            <dl class="row">
-                <template v-for="(value, key) in data.account.auxData">
-                <dt class="col-sm-3">{{key}}</dt>
-                <dd class="col-sm-9">{{value}}</dd>
-                </template>
-            </dl>
-        </dd>
+        <dd class="col-sm-9 col-md-10"><aux-data :data="data.account.auxData"></aux-data></dd>
     </dl>
 </div>
 `})

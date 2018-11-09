@@ -78,3 +78,15 @@ Vue.component('aux-data', {
     </template>
 </dl>
 `})
+
+Vue.component('bank-data', {
+    props: ['bank'],
+    template: `
+<ul class="list-inline" v-if="bank">
+    <li class="list-inline-item">{{bank.name}}</li>
+    <li class="list-inline-item">{{bank.bicOrSwift}}</li>
+    <li class="list-inline-item">{{bank.code}}</li>
+    <li class="list-inline-item">{{bank.countryCode}}</li>
+    <li class="list-inline-item" v-for="line in bank.address">{{line}}</li>
+</ul>
+`})

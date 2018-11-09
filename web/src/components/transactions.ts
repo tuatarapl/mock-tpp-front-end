@@ -6,15 +6,7 @@ Vue.component('sender-recipient', {
 <ul class="list-unstyled">
     <li>{{data.accountNumber}}</li>
     <li><name-address :data="data.nameAddress"></name-address></li>
-    <li>
-        <ul class="list-inline">
-            <li class="list-inline-item">{{data.bank.name}}</li>
-            <li class="list-inline-item">{{data.bank.bicOrSwift}}</li>
-            <li class="list-inline-item">{{data.bank.code}}</li>
-            <li class="list-inline-item">{{data.bank.countryCode}}</li>
-            <li class="list-inline-item" v-for="line in data.bank.address">{{line}}</li>
-        </ul>
-    </li>
+    <li><bank-data :bank="data.bank"></bank-data></li>
 </ul>
 `})
 
