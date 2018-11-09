@@ -8,7 +8,8 @@ const operationToComponent = {
     getTransactionsRejected: 'get-transactions-request',
     getTransactionsScheduled: 'get-transactions-request',
     getTransactionsCancelled: 'get-transactions-request',
-    getHolds: 'get-transactions-request'
+    getHolds: 'get-transactions-request',
+    getTransactionDetail: 'get-transaction-request'
 }
 
 Vue.component('edit-request', {
