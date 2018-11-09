@@ -26,3 +26,7 @@ Vue.component('get-accounts-result', {
 </div>
 `})
 
+Vue.component('get-accounts-request', {
+    props: ['request'],
+    template: '<div></div>'
+})

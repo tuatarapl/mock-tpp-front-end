@@ -78,13 +78,7 @@ export const aspsp: RouteConfig = {
                         <option v-for="session in aspsp.sessions">{{session.identity.sessionId}}</option>
                     </select>
                 </div>
-                <div class="form-group">
-                    <label for="operationPayload">Payload</label>
-                    <textarea class="form-control" id="operationPayload" rows="10"
-                    v-bind:value="JSON.stringify(operationPayload,null,4)"
-                    v-on:input="setOperationPayload($event.target.value)">
-                    </textarea>
-                </div>
+                <edit-request :request="operationPayload" :operation="operation"></edit-request>
                 <button type="button" class="btn btn-primary" @click="doCall()">Call</button>
             </form>
             <h2>Results</h2>
@@ -131,13 +125,6 @@ export const aspsp: RouteConfig = {
                 this.newSessionName = '',
                 this.newSessionConsent = _.cloneDeep(consentTemplate)
             })
-          },
-          setOperationPayload(value: string) {
-              try {
-                  this.operationPayload = JSON.parse(value)
-              } catch (e) {
-                  console.warn(e)
-              }
           },
           jsonInput: _.debounce((field: string, value: string) => {
               try {
