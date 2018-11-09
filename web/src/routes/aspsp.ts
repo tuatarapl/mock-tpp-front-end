@@ -13,7 +13,8 @@ function createSession(aspspId, kind, consent) {
 }
 
 function callAPI(aspspId, operation, session, payload) {
-    return axios.post(`/api/aspsps/${aspspId}/call/${operation}`, {session, payload}).then((response) => response.data)
+    return axios.post(`/api/aspsps/${aspspId}/call/${operation}`, {session, payload}).then((response) =>
+        ({response: response.data, operation}))
 }
 
 const consentTemplate = {
@@ -107,7 +108,10 @@ export const aspsp: RouteConfig = {
       },
       beforeRouteEnter(to, from, next) {
         get(to.params.aspspId).then((data) => {
-            next((vm: any) => { vm.aspsp = data })
+            next((vm: any) => {
+                vm.aspsp = data
+                vm.session = data.sessions[0] ? data.sessions[0].identity.sessionId : null
+            })
         })
       },
       beforeRouteUpdate(to, from, next) {
