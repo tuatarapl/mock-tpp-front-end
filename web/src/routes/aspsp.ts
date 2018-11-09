@@ -51,6 +51,7 @@ export const aspsp: RouteConfig = {
                 </ul>
             </li>
         </ul>
+        <h3>New</h3>
         <form class="form-group">
             <div class="form-group">
                 <label for="newSessionName">Name</label>
@@ -65,6 +66,7 @@ export const aspsp: RouteConfig = {
             </div>
             <button type="button" class="btn btn-primary" @click="doCreateSession()">Create</button>
         </form>
+        <h2>Operations</h2>
         <form class="form-group">
             <div class="form-group">
                 <label for="operation">Operation</label>
