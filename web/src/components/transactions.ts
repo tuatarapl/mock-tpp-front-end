@@ -99,6 +99,42 @@ Vue.component('get-transactions-request', {
         <input type="text" class="form-control" id="accountNumber" v-model="request.accountNumber"/>
     </div>
     <div class="form-group">
+        <label for="itemIdFrom">Item Id From</label>
+        <input type="text" class="form-control" id="itemIdFrom" v-model="request.itemIdFrom"/>
+    </div>
+    <div class="form-group">
+        <label for="transactionDateFrom">Transaction Date From</label>
+        <input type="date" class="form-control" id="transactionDateFrom" v-model="request.transactionDateFrom"/>
+    </div>
+    <div class="form-group">
+        <label for="transactionDateTo">Transaction Date To</label>
+        <input type="date" class="form-control" id="transactionDateTo" v-model="request.transactionDateTo"/>
+    </div>
+    <div class="form-group">
+        <label for="bookingDateFrom">Booking Date From</label>
+        <input type="date" class="form-control" id="bookingDateFrom" v-model="request.bookingDateFrom"/>
+    </div>
+    <div class="form-group">
+        <label for="bookingDateTo">Booking Date To</label>
+        <input type="date" class="form-control" id="bookingDateTo" v-model="request.bookingDateTo"/>
+    </div>
+    <div class="form-group">
+        <label for="minAmount">Min Amount</label>
+        <input type="text" class="form-control" id="minAmount" v-model="request.minAmount"/>
+    </div>
+    <div class="form-group">
+        <label for="maxAmount">Max Amount</label>
+        <input type="text" class="form-control" id="maxAmount" v-model="request.maxAmount"/>
+    </div>
+    <div class="form-group">
+        <label for="type">Type</label>
+        <select class="form-control" id="type" v-model="request.type">
+            <option></option>
+            <option>CREDIT</option>
+            <option>DEBIT</option>
+        </select>
+    </div>
+    <div class="form-group">
         <label for="pageId">Page Id</label>
         <input type="text" class="form-control" id="pageId" v-model="request.pageId"/>
     </div>
@@ -109,3 +145,13 @@ Vue.component('get-transactions-request', {
 </form>
 `
 })
+/*"itemIdFrom": "string",
+"transactionDateFrom": "string",
+"transactionDateTo": "string",
+"bookingDateFrom": "string",
+"bookingDateTo": "string",
+"minAmount": "string",
+"maxAmount": "string",
+"pageId": "string",
+"perPage": 0,
+"type": "CREDIT"*/

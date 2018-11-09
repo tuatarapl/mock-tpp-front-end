@@ -116,7 +116,7 @@ export const aspsp: RouteConfig = {
       },
       methods: {
           doCall() {
-            callAPI(this.aspsp.aspspId, this.operation, this.session, this.operationPayload)
+            callAPI(this.aspsp.aspspId, this.operation, this.session, _.pickBy(this.operationPayload))
                 .then((response) => this.results.push(response))
           },
           doCreateSession() {
