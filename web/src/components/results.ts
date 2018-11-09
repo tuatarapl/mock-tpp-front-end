@@ -2,7 +2,13 @@ import Vue from 'vue'
 
 const operationToComponent = {
     getAccounts: 'get-accounts-result',
-    getAccount: 'get-account-result'
+    getAccount: 'get-account-result',
+    getTransactionsDone: 'get-transactions-done-result',
+    getTransactionsPending: 'get-transactions-result',
+    getTransactionsRejected: 'get-transactions-result',
+    getTransactionsScheduled: 'get-transactions-result',
+    getTransactionsCancelled: 'get-transactions-result',
+    getHolds: 'get-transactions-result'
 }
 
 Vue.component('show-results', {
@@ -47,3 +53,28 @@ Vue.component('result-paging', {
 </dl>
 `
 })
+
+Vue.component('dictionary-item', {
+    props: ['item'],
+    template: `
+<span v-if="item">{{item.description}} ({{item.code}})</span>
+`})
+
+Vue.component('name-address', {
+    props: ['data'],
+    template: `
+<ul v-if="data && data.value" class="list-unstyled">
+    <li v-for="line in data.value">{{line}}</li>
+</ul>
+`})
+
+Vue.component('aux-data', {
+    props: ['data'],
+    template: `
+<dl class="row" v-if="data">
+    <template v-for="(value, key) in data">
+        <dt class="col-sm-3">{{key}}</dt>
+        <dd class="col-sm-9">{{value}}</dd>
+    </template>
+</dl>
+`})
