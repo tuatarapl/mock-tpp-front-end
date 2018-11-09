@@ -1,7 +1,8 @@
 import Vue from 'vue'
 
 const operationToComponent = {
-    getAccounts: 'get-accounts-request'
+    getAccounts: 'get-accounts-request',
+    getAccount: 'get-account-request'
 }
 
 Vue.component('edit-request', {
