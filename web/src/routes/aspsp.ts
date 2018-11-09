@@ -37,56 +37,53 @@ export const aspsp: RouteConfig = {
     path: 'aspsps/:aspspId',
     component: Vue.extend({
       template: `
-      <div class="row>
-        <div class="col-12>
-            <h1>{{aspsp.name}}</h1>
-            <h2>Sessions</h2>
-            <ul class="list-group">
-                <li class="list-group-item" v-for="session in aspsp.sessions">
-                    <h3>{{session.identity.sessionId}}</h3>
-                    <ul class="list-group">
-                        <li class="list-group-item" v-for="interaction in session.interactions">
-                            <a @click="openRedirect(interaction.redirectUri)" href="#">Redirect</a>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-            <form class="form-group">
-                <div class="form-group">
-                    <label for="newSessionName">Name</label>
-                    <input type="text" class="form-control" id="newSessionName" v-model="newSessionName"/>
-                </div>
-                <div class="form-group">
-                    <label for="newSessionConsent">Consent</label>
-                    <textarea class="form-control" id="newSessionConsent" rows="10"
-                    v-bind:value="JSON.stringify(newSessionConsent,null,4)"
-                    v-on:input="jsonInput('newSessionConsent',$event.target.value)">
-                    </textarea>
-                </div>
-                <button type="button" class="btn btn-primary" @click="doCreateSession()">Create</button>
-            </form>
-            <form class="form-group">
-                <div class="form-group">
-                    <label for="operation">Operation</label>
-                    <select class="form-control" id="operation" v-model="operation">
-                        <option v-for="o in operations">{{o}}</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="session">Session</label>
-                    <select class="form-control" id="session" v-model="session">
-                        <option v-for="session in aspsp.sessions">{{session.identity.sessionId}}</option>
-                    </select>
-                </div>
-                <edit-request :request="operationPayload" :operation="operation"></edit-request>
-                <button type="button" class="btn btn-primary" @click="doCall()">Call</button>
-            </form>
-            <h2>Results</h2>
-            <template v-for="result in results">
-                <show-results :data="result"></show-results>
-            </template>
-        </div>
-      </div>
+<div class="row>
+    <div class="col-12>
+        <h1>{{aspsp.name}}</h1>
+        <h2>Sessions</h2>
+        <ul class="list-group">
+            <li class="list-group-item" v-for="session in aspsp.sessions">
+                <h3>{{session.identity.sessionId}}</h3>
+                <ul class="list-group">
+                    <li class="list-group-item" v-for="interaction in session.interactions">
+                        <a @click="openRedirect(interaction.redirectUri)" href="#">Redirect</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        <form class="form-group">
+            <div class="form-group">
+                <label for="newSessionName">Name</label>
+                <input type="text" class="form-control" id="newSessionName" v-model="newSessionName"/>
+            </div>
+            <div class="form-group">
+                <label for="newSessionConsent">Consent</label>
+                <textarea class="form-control" id="newSessionConsent" rows="10"
+                v-bind:value="JSON.stringify(newSessionConsent,null,4)"
+                v-on:input="jsonInput('newSessionConsent',$event.target.value)">
+                </textarea>
+            </div>
+            <button type="button" class="btn btn-primary" @click="doCreateSession()">Create</button>
+        </form>
+        <form class="form-group">
+            <div class="form-group">
+                <label for="operation">Operation</label>
+                <select class="form-control" id="operation" v-model="operation">
+                    <option v-for="o in operations">{{o}}</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="session">Session</label>
+                <select class="form-control" id="session" v-model="session">
+                    <option v-for="session in aspsp.sessions">{{session.identity.sessionId}}</option>
+                </select>
+            </div>
+            <edit-request :request="operationPayload" :operation="operation"></edit-request>
+            <button type="button" class="btn btn-primary" @click="doCall()">Call</button>
+        </form>
+        <results-modal :results="results" ref="results"></results-modal>
+    </div>
+</div>
       `,
       data() {
         return {
@@ -94,7 +91,7 @@ export const aspsp: RouteConfig = {
           operations,
           operation: operations[0],
           operationPayload: {},
-          results: [],
+          results: null,
           session: null,
           newSessionName: '',
           newSessionConsent: _.cloneDeep(consentTemplate)
@@ -117,7 +114,10 @@ export const aspsp: RouteConfig = {
       methods: {
           doCall() {
             callAPI(this.aspsp.aspspId, this.operation, this.session, _.pickBy(this.operationPayload))
-                .then((response) => this.results.push(response))
+                .then((response) => {
+                    this.results = response
+                    this.$refs.results.show()
+                })
           },
           doCreateSession() {
             createSession(this.aspsp.aspspId, this.newSessionName, this.newSessionConsent).then((newSession) => {

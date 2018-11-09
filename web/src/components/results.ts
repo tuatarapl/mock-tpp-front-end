@@ -1,3 +1,4 @@
+import * as $ from 'jquery'
 import Vue from 'vue'
 
 const operationToComponent = {
@@ -16,7 +17,6 @@ Vue.component('show-results', {
     props: ['data'],
     template: `
 <div>
-    <h3>{{data.operation}}</h3>
     <component :is="currentComponent" :data="data.response"></component>
 </div>
 `,
@@ -91,3 +91,31 @@ Vue.component('bank-data', {
     <li class="list-inline-item" v-for="line in bank.address">{{line}}</li>
 </ul>
 `})
+
+Vue.component('results-modal', {
+    props: ['results'],
+    template: `
+<div class="modal" tabindex="-1" role="dialog" ref="modal" v-if="results">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{results.operation}}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <show-results :data="results"></show-results>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+`,
+methods: {
+    show() {
+        Vue.nextTick().then(() => $(this.$refs.modal).modal())
+    }
+}})
