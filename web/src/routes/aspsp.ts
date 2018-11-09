@@ -87,11 +87,9 @@ export const aspsp: RouteConfig = {
                 <button type="button" class="btn btn-primary" @click="doCall()">Call</button>
             </form>
             <h2>Results</h2>
-            <ul>
-                <li v-for="result in results">
-                    {{result}}
-                </li>
-            </ul>
+            <template v-for="result in results">
+                <show-results :data="result"></show-results>
+            </template>
         </div>
       </div>
       `,
