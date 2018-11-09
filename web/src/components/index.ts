@@ -1,3 +1,4 @@
+import './consent'
 import './getAccount'
 import './getAccounts'
 import './request'

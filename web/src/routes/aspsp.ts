@@ -64,6 +64,7 @@ export const aspsp: RouteConfig = {
                 v-on:input="jsonInput('newSessionConsent',$event.target.value)">
                 </textarea>
             </div>
+            <consent-edit :consent="newSessionConsent"></consent-edit>
             <button type="button" class="btn btn-primary" @click="doCreateSession()">Create</button>
         </form>
         <h2>Operations</h2>
