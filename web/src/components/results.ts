@@ -8,7 +8,7 @@ const operationToComponent = {
     getTransactionsRejected: 'get-transactions-rejected-result',
     getTransactionsScheduled: 'get-transactions-result',
     getTransactionsCancelled: 'get-transactions-result',
-    getHolds: 'get-transactions-result'
+    getHolds: 'get-holds-result'
 }
 
 Vue.component('show-results', {
