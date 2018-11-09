@@ -23,10 +23,22 @@ Vue.component('get-accounts-result', {
             </tr>
         </tbody>
     </table>
+    <result-paging :pageInfo="data.pageInfo"></result-paging>
 </div>
 `})
 
 Vue.component('get-accounts-request', {
     props: ['request'],
-    template: '<div></div>'
+    template: `
+<form class="form-group">
+    <div class="form-group">
+        <label for="pageId">Page Id</label>
+        <input type="text" class="form-control" id="pageId" v-model="request.pageId"/>
+    </div>
+    <div class="form-group">
+        <label for="perPage">Per Page</label>
+        <input type="number" class="form-control" id="perPage" v-model.number="request.perPage"/>
+    </div>
+</form>
+`
 })
