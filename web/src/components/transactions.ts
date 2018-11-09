@@ -69,6 +69,59 @@ Vue.component('get-transactions-done-result', {
 </div>
 `})
 
+Vue.component('get-transactions-pending-result', {
+    props: ['data'],
+    template: `
+<div>
+    <result-header :header="data.responseHeader"></result-header>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Item Id</th>
+                <th>Amount</th>
+                <th>Currency</th>
+                <th>Description</th>
+                <th>Transaction Type</th>
+                <th>Trade Date</th>
+            </tr>
+            <tr>
+                <th colspan="2">MCC</th>
+                <th colspan="2">Transaction Category</th>
+                <th colspan="2">Additional Data</th>
+            </tr>
+            <tr>
+                <th colspan="2">Initiator</th>
+                <th colspan="2">Sender</th>
+                <th colspan="2">Recipient</th>
+            </tr>
+        </thead>
+        <tbody>
+            <template v-for="transaction in data.transactions">
+                <tr>
+                    <td>{{transaction.itemId}}</td>
+                    <td>{{transaction.amount}}</td>
+                    <td>{{transaction.currency}}</td>
+                    <td>{{transaction.description}}</td>
+                    <td>{{transaction.transactionType}}</td>
+                    <td>{{transaction.tradeDate}}</td>
+                </tr>
+                <tr>
+                    <td colspan="2">{{transaction.mcc}}</td>
+                    <td colspan="2">{{transaction.transactionCategory}}</td>
+                    <td colspan="2"><aux-data :data="transaction.auxData"></aux-data></td>
+                </tr>
+                <tr>
+                    <td colspan="2"><name-address :data="transaction.initiator"></name-address></td>
+                    <td colspan="2"><sender-recipient :data="transaction.sender"></sender-recipient></td>
+                    <td colspan="2"><sender-recipient :data="transaction.recipient"></sender-recipient></td>
+                </tr>
+            </template>
+        </tbody>
+    </table>
+    <result-paging :pageInfo="data.pageInfo"></result-paging>
+</div>
+`})
+
 Vue.component('get-transactions-result', {
     props: ['data'],
     template: `
@@ -145,13 +198,3 @@ Vue.component('get-transactions-request', {
 </form>
 `
 })
-/*"itemIdFrom": "string",
-"transactionDateFrom": "string",
-"transactionDateTo": "string",
-"bookingDateFrom": "string",
-"bookingDateTo": "string",
-"minAmount": "string",
-"maxAmount": "string",
-"pageId": "string",
-"perPage": 0,
-"type": "CREDIT"*/

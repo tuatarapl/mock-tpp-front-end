@@ -4,7 +4,7 @@ const operationToComponent = {
     getAccounts: 'get-accounts-result',
     getAccount: 'get-account-result',
     getTransactionsDone: 'get-transactions-done-result',
-    getTransactionsPending: 'get-transactions-result',
+    getTransactionsPending: 'get-transactions-pending-result',
     getTransactionsRejected: 'get-transactions-result',
     getTransactionsScheduled: 'get-transactions-result',
     getTransactionsCancelled: 'get-transactions-result',
