@@ -37,8 +37,8 @@ export const aspsp: RouteConfig = {
     path: 'aspsps/:aspspId',
     component: Vue.extend({
       template: `
-<div class="row>
-    <div class="col-12>
+<div class="row" >
+    <div class="col-12" v-if="aspsp">
         <h1>{{aspsp.name}}</h1>
         <h2>Sessions</h2>
         <ul class="list-group">
