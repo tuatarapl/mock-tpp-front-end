@@ -33,6 +33,42 @@ Vue.component('consent-edit', {
                 </privilege-section-wrapper>
                 <privilege-section-wrapper v-if="consent.scope_details.scopeGroupType === 'ais'"
                     :privilege="privilege"
+                    label="Get Holds"
+                    section="ais:getHolds"
+                    component="privilege-ais-aspsp-in-edit">
+                </privilege-section-wrapper>
+                <privilege-section-wrapper v-if="consent.scope_details.scopeGroupType === 'ais'"
+                    :privilege="privilege"
+                    label="Get Transactions Done"
+                    section="ais:getTransactionsDone"
+                    component="privilege-ais-aspsp-in-edit">
+                </privilege-section-wrapper>
+                <privilege-section-wrapper v-if="consent.scope_details.scopeGroupType === 'ais'"
+                    :privilege="privilege"
+                    label="Get Transactions Pending"
+                    section="ais:getTransactionsPending"
+                    component="privilege-ais-aspsp-in-edit">
+                </privilege-section-wrapper>
+                <privilege-section-wrapper v-if="consent.scope_details.scopeGroupType === 'ais'"
+                    :privilege="privilege"
+                    label="Get Transactions Rejected"
+                    section="ais:getTransactionsRejected"
+                    component="privilege-ais-aspsp-in-edit">
+                </privilege-section-wrapper>
+                <privilege-section-wrapper v-if="consent.scope_details.scopeGroupType === 'ais'"
+                    :privilege="privilege"
+                    label="Get Transactions Cancelled"
+                    section="ais:getTransactionsCancelled"
+                    component="privilege-ais-aspsp-in-edit">
+                </privilege-section-wrapper>
+                <privilege-section-wrapper v-if="consent.scope_details.scopeGroupType === 'ais'"
+                    :privilege="privilege"
+                    label="Get Transactions Scheduled"
+                    section="ais:getTransactionsScheduled"
+                    component="privilege-ais-aspsp-in-edit">
+                </privilege-section-wrapper>
+                <privilege-section-wrapper v-if="consent.scope_details.scopeGroupType === 'ais'"
+                    :privilege="privilege"
                     label="Get Transaction Detail"
                     section="ais:getTransactionDetail"
                     component="privilege-ais-aspsp-in-simple-edit">
@@ -121,6 +157,29 @@ Vue.component('privilege-ais-aspsp-in-simple-edit', {
         <select class="form-control" id="scopeUsageLimit" v-model="privilege.scopeUsageLimit">
             <option v-for="scopeUsageLimit in scopeUsageLimits">{{scopeUsageLimit}}</option>
         </select>
+    </div>
+</div>
+    `,
+    data() {
+        return {
+            scopeUsageLimits: ['single', 'multiple']
+        }
+    }
+})
+Vue.component('privilege-ais-aspsp-in-edit', {
+    props: ['privilege'],
+    template: `
+<div v-if="privilege">
+    <div class="form-group">
+        <label for="scopeUsageLimit">Scope Usage Limit</label>
+        <select class="form-control" id="scopeUsageLimit" v-model="privilege.scopeUsageLimit">
+            <option v-for="scopeUsageLimit in scopeUsageLimits">{{scopeUsageLimit}}</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="maxAllowedHistoryLong">Max Allowed History Long</label>
+        <input type="number" class="form-control" id="maxAllowedHistoryLong"
+            v-model.number="privilege.maxAllowedHistoryLong" min="1" max="1460"/>
     </div>
 </div>
     `,
