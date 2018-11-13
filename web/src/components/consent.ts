@@ -19,16 +19,12 @@ Vue.component('consent-edit', {
                     <input type="text" class="form-control" :id="'accountNumber_'+index"
                         v-model="privilege.accountNumber"/>
                 </div>
-                <template v-if="consent.scope_details.scopeGroupType === 'ais-accounts'">
-                    <h4>Get Accounts
-                    <button type="button" class="btn btn-primary" v-if="!privilege['ais-accounts:getAccounts']"
-                        @click="doAddSection(privilege,'ais-accounts:getAccounts',{})">Add</button>
-                    <button type="button" class="btn btn-primary" v-if="privilege['ais-accounts:getAccounts']"
-                        @click="doRemoveSection(privilege,'ais-accounts:getAccounts')">Delete</button>
-                    </h4>
-                    <privilege-ais-aspsp-in-simple-edit :privilege="privilege['ais-accounts:getAccounts']">
-                    </privilege-ais-aspsp-in-simple-edit>
-                </template>
+                <privilege-section-wrapper v-if="consent.scope_details.scopeGroupType === 'ais-accounts'"
+                    :privilege="privilege"
+                    label="Get Accounts"
+                    section="ais-accounts:getAccounts"
+                    component="privilege-ais-aspsp-in-simple-edit">
+                </privilege-section-wrapper>
                 <button type="button" class="btn btn-primary" @click="doDeletePrivilege(index)">Delete</button>
             </li>
             <li class="list-group-item">
@@ -80,6 +76,30 @@ Vue.component('consent-edit', {
         }
     }
 })
+
+Vue.component('privilege-section-wrapper', {
+    props: ['privilege', 'label', 'section', 'component'],
+    template: `
+<div>
+    <h4>{{label}}
+    <button type="button" class="btn btn-primary" v-if="!privilege[section]"
+        @click="doAddSection(privilege,section,{})">Add</button>
+    <button type="button" class="btn btn-primary" v-if="privilege[section]"
+        @click="doRemoveSection(privilege,section)">Delete</button>
+    </h4>
+    <component :is="component" :privilege="privilege[section]"></component>
+</div>
+    `,
+    methods: {
+        doAddSection(target, section, value) {
+            Vue.set(target, section, value)
+        },
+        doRemoveSection(target, section) {
+            Vue.delete(target, section)
+        }
+    }
+})
+
 Vue.component('privilege-ais-aspsp-in-simple-edit', {
     props: ['privilege'],
     template: `
