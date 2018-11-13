@@ -33,14 +33,28 @@ const operations = ['getAccounts', 'getAccount', 'getTransactionsDone', 'getTran
     'getTransactionDetail']
 
 export const aspsp: RouteConfig = {
-    name: 'aspsp',
     path: 'aspsps/:aspspId',
-    component: Vue.extend({
-      template: `
+    component: Vue.extend({template: `
+<div class="container mt-3">
+    <nav class="nav nav-tabs">
+        <router-link  :to="{ name: 'aspsp.sessions'}" class="nav-link" >Sessions</router-link>
+        <router-link  :to="{ name: 'aspsp.operations'}" class="nav-link" >Operations</router-link>
+    </nav>
+    <router-view></router-view>
+</div>
+    `}),
+    children: [
+    {
+        path: '',
+        redirect: 'sessions'
+    }, {
+        name: 'aspsp.sessions',
+        path: 'sessions',
+        component: Vue.extend({
+            template: `
 <div class="row" >
     <div class="col-12" v-if="aspsp">
         <h1>{{aspsp.name}}</h1>
-        <h2>Sessions</h2>
         <ul class="list-group">
             <li class="list-group-item" v-for="session in aspsp.sessions">
                 <h3>{{session.identity.sessionId}}</h3>
@@ -60,7 +74,53 @@ export const aspsp: RouteConfig = {
             <consent-edit :consent="newSessionConsent"></consent-edit>
             <button type="button" class="btn btn-primary" @click="doCreateSession()">Create</button>
         </form>
-        <h2>Operations</h2>
+    </div>
+</div>
+            `,
+            data() {
+            return {
+                aspsp: null,
+                session: null,
+                newSessionName: '',
+                newSessionConsent: _.cloneDeep(consentTemplate)
+            }
+            },
+            beforeRouteEnter(to, from, next) {
+                get(to.params.aspspId).then((data) => {
+                    next((vm: any) => {
+                        vm.aspsp = data
+                        vm.session = data.sessions[0] ? data.sessions[0].identity.sessionId : null
+                    })
+                })
+            },
+            beforeRouteUpdate(to, from, next) {
+                get(to.params.aspspId).then((data) => {
+                    this.aspsp = data
+                    next()
+                })
+            },
+            methods: {
+                doCreateSession() {
+                    createSession(this.aspsp.aspspId, this.newSessionName, this.newSessionConsent)
+                    .then((newSession) => {
+                        this.aspsp.sessions.push(newSession)
+                        this.newSessionName = '',
+                        this.newSessionConsent = _.cloneDeep(consentTemplate)
+                    })
+                },
+                openRedirect(uri: string) {
+                    window.open(uri, '_blank')
+                }
+            }
+        })
+    }, {
+        name: 'aspsp.operations',
+        path: 'operations',
+        component: Vue.extend({
+            template: `
+<div class="row" >
+    <div class="col-12" v-if="aspsp">
+        <h1>{{aspsp.name}}</h1>
         <form class="form-group">
             <div class="form-group">
                 <label for="operation">Operation</label>
@@ -80,52 +140,39 @@ export const aspsp: RouteConfig = {
         <results-modal :results="results" ref="results"></results-modal>
     </div>
 </div>
-      `,
-      data() {
-        return {
-          aspsp: null,
-          operations,
-          operation: operations[0],
-          operationPayload: {},
-          results: null,
-          session: null,
-          newSessionName: '',
-          newSessionConsent: _.cloneDeep(consentTemplate)
-        }
-      },
-      beforeRouteEnter(to, from, next) {
-        get(to.params.aspspId).then((data) => {
-            next((vm: any) => {
-                vm.aspsp = data
-                vm.session = data.sessions[0] ? data.sessions[0].identity.sessionId : null
-            })
-        })
-      },
-      beforeRouteUpdate(to, from, next) {
-        get(to.params.aspspId).then((data) => {
-            this.aspsp = data
-            next()
-        })
-      },
-      methods: {
-          doCall() {
-            callAPI(this.aspsp.aspspId, this.operation, this.session, _.pickBy(this.operationPayload))
-                .then((response) => {
-                    this.results = response
-                    this.$refs.results.show()
+            `,
+            data() {
+            return {
+                aspsp: null,
+                operations,
+                operation: operations[0],
+                operationPayload: {},
+                results: null
+            }
+            },
+            beforeRouteEnter(to, from, next) {
+                get(to.params.aspspId).then((data) => {
+                    next((vm: any) => {
+                        vm.aspsp = data
+                        vm.session = data.sessions[0] ? data.sessions[0].identity.sessionId : null
+                    })
                 })
-          },
-          doCreateSession() {
-            createSession(this.aspsp.aspspId, this.newSessionName, this.newSessionConsent).then((newSession) => {
-                this.aspsp.sessions.push(newSession)
-                this.newSessionName = '',
-                this.newSessionConsent = _.cloneDeep(consentTemplate)
-            })
-          },
-          openRedirect(uri: string) {
-            window.open(uri, '_blank')
-          }
-
-      }
-    })
-  }
+            },
+            beforeRouteUpdate(to, from, next) {
+                get(to.params.aspspId).then((data) => {
+                    this.aspsp = data
+                    next()
+                })
+            },
+            methods: {
+                doCall() {
+                    callAPI(this.aspsp.aspspId, this.operation, this.session, _.pickBy(this.operationPayload))
+                        .then((response) => {
+                            this.results = response
+                            this.$refs.results.show()
+                        })
+                }
+            }
+        })
+    }]
+}
