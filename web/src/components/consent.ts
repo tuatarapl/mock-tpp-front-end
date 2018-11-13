@@ -25,6 +25,18 @@ Vue.component('consent-edit', {
                     section="ais-accounts:getAccounts"
                     component="privilege-ais-aspsp-in-simple-edit">
                 </privilege-section-wrapper>
+                <privilege-section-wrapper v-if="consent.scope_details.scopeGroupType === 'ais'"
+                    :privilege="privilege"
+                    label="Get Account"
+                    section="ais:getAccount"
+                    component="privilege-ais-aspsp-in-simple-edit">
+                </privilege-section-wrapper>
+                <privilege-section-wrapper v-if="consent.scope_details.scopeGroupType === 'ais'"
+                    :privilege="privilege"
+                    label="Get Transaction Detail"
+                    section="ais:getTransactionDetail"
+                    component="privilege-ais-aspsp-in-simple-edit">
+                </privilege-section-wrapper>
                 <button type="button" class="btn btn-primary" @click="doDeletePrivilege(index)">Delete</button>
             </li>
             <li class="list-group-item">
