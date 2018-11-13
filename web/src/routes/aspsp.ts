@@ -57,13 +57,6 @@ export const aspsp: RouteConfig = {
                 <label for="newSessionName">Name</label>
                 <input type="text" class="form-control" id="newSessionName" v-model="newSessionName"/>
             </div>
-            <div class="form-group">
-                <label for="newSessionConsent">Consent</label>
-                <textarea class="form-control" id="newSessionConsent" rows="10"
-                v-bind:value="JSON.stringify(newSessionConsent,null,4)"
-                v-on:input="jsonInput('newSessionConsent',$event.target.value)">
-                </textarea>
-            </div>
             <consent-edit :consent="newSessionConsent"></consent-edit>
             <button type="button" class="btn btn-primary" @click="doCreateSession()">Create</button>
         </form>
@@ -129,13 +122,6 @@ export const aspsp: RouteConfig = {
                 this.newSessionConsent = _.cloneDeep(consentTemplate)
             })
           },
-          jsonInput: _.debounce((field: string, value: string) => {
-              try {
-              this[field] = JSON.parse(value)
-              } catch (e) {
-                  console.warn(e)
-              }
-          }, 1000),
           openRedirect(uri: string) {
             window.open(uri, '_blank')
           }
