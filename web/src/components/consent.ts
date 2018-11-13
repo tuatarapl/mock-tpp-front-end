@@ -19,6 +19,16 @@ Vue.component('consent-edit', {
                     <input type="text" class="form-control" :id="'accountNumber_'+index"
                         v-model="privilege.accountNumber"/>
                 </div>
+                <template v-if="consent.scope_details.scopeGroupType === 'ais-accounts'">
+                    <h4>Get Accounts
+                    <button type="button" class="btn btn-primary" v-if="!privilege['ais-accounts:getAccounts']"
+                        @click="doAddSection(privilege,'ais-accounts:getAccounts',{})">Add</button>
+                    <button type="button" class="btn btn-primary" v-if="privilege['ais-accounts:getAccounts']"
+                        @click="doRemoveSection(privilege,'ais-accounts:getAccounts')">Delete</button>
+                    </h4>
+                    <privilege-ais-aspsp-in-simple-edit :privilege="privilege['ais-accounts:getAccounts']">
+                    </privilege-ais-aspsp-in-simple-edit>
+                </template>
                 <button type="button" class="btn btn-primary" @click="doDeletePrivilege(index)">Delete</button>
             </li>
             <li class="list-group-item">
@@ -47,7 +57,7 @@ Vue.component('consent-edit', {
         </select>
     </div>
 </form>
-`,
+    `,
     data() {
         return {
             scopeGroupTypes: ['ais-accounts', 'ais', 'pis'],
@@ -56,11 +66,35 @@ Vue.component('consent-edit', {
         }
     },
     methods: {
+        doAddSection(target, section, value) {
+            Vue.set(target, section, value)
+        },
+        doRemoveSection(target, section) {
+            Vue.delete(target, section)
+        },
         doAddPrivilege() {
             this.consent.scope_details.privilegeList.push({})
         },
         doDeletePrivilege(index) {
             this.consent.scope_details.privilegeList.splice(index, 1)
+        }
+    }
+})
+Vue.component('privilege-ais-aspsp-in-simple-edit', {
+    props: ['privilege'],
+    template: `
+<div v-if="privilege">
+    <div class="form-group">
+        <label for="scopeUsageLimit">Scope Usage Limit</label>
+        <select class="form-control" id="scopeUsageLimit" v-model="privilege.scopeUsageLimit">
+            <option v-for="scopeUsageLimit in scopeUsageLimits">{{scopeUsageLimit}}</option>
+        </select>
+    </div>
+</div>
+    `,
+    data() {
+        return {
+            scopeUsageLimits: ['single', 'multiple']
         }
     }
 })
