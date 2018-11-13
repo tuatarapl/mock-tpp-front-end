@@ -425,7 +425,7 @@ Vue.component('get-transaction-result', {
             <dd class="col-sm-9">{{data.currencyDate}}</dd>
         </template>
         <template v-if="data.transactionRate">
-            <dt class="col-sm-3">Currency Date</dt>
+            <dt class="col-sm-3">Transaction Rate</dt>
             <dd class="col-sm-9">
                 <dl class="row" v-for="rate in data.transactionRate">
                     <dt class="col-sm-3">Card Holder</dt>
