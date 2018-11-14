@@ -78,12 +78,12 @@ export const aspsp: RouteConfig = {
 </div>
             `,
             data() {
-            return {
-                aspsp: null,
-                session: null,
-                newSessionName: '',
-                newSessionConsent: _.cloneDeep(consentTemplate)
-            }
+                return {
+                    aspsp: null,
+                    session: null,
+                    newSessionName: '',
+                    newSessionConsent: _.cloneDeep(consentTemplate)
+                }
             },
             beforeRouteEnter(to, from, next) {
                 get(to.params.aspspId).then((data) => {
@@ -142,13 +142,13 @@ export const aspsp: RouteConfig = {
 </div>
             `,
             data() {
-            return {
-                aspsp: null,
-                operations,
-                operation: operations[0],
-                operationPayload: {},
-                results: null
-            }
+                return {
+                    aspsp: null,
+                    operations,
+                    operation: operations[0],
+                    operationPayload: {},
+                    results: null
+                }
             },
             beforeRouteEnter(to, from, next) {
                 get(to.params.aspspId).then((data) => {
