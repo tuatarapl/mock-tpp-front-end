@@ -12,6 +12,11 @@ function createSession(aspspId, kind, consent) {
     return axios.post(`/api/aspsps/${aspspId}/sessions`, {kind, consent}).then((response) => response.data)
 }
 
+function updateInteraction(interactionId, state, event) {
+    return axios.post(`/api/interactions/${interactionId}/state`,
+    {state, event}).then((response) => response.data)
+}
+
 function callAPI(aspspId, operation, session, payload) {
     return axios.post(`/api/aspsps/${aspspId}/call/${operation}`, {session, payload}).then((response) =>
         ({response: response.data, operation}))
@@ -60,7 +65,8 @@ export const aspsp: RouteConfig = {
                 <h3>{{session.identity.sessionId}}</h3>
                 <ul class="list-group">
                     <li class="list-group-item" v-for="interaction in session.interactions">
-                        <a @click="openRedirect(interaction.redirectUri)" href="#">Redirect</a>
+                        <span class="badge badge-pill badge-primary">{{interaction.state}}</span>
+                        <a @click="executeInteraction(interaction)" href="#">Redirect</a>
                     </li>
                 </ul>
             </li>
@@ -80,7 +86,6 @@ export const aspsp: RouteConfig = {
             data() {
                 return {
                     aspsp: null,
-                    session: null,
                     newSessionName: '',
                     newSessionConsent: _.cloneDeep(consentTemplate)
                 }
@@ -107,6 +112,11 @@ export const aspsp: RouteConfig = {
                         this.newSessionName = '',
                         this.newSessionConsent = _.cloneDeep(consentTemplate)
                     })
+                },
+                executeInteraction(interaction) {
+                    this.openRedirect(interaction.redirectUri)
+                    updateInteraction(interaction.interactionId,
+                        'in_progress', 'PSU sent to ASPSP').then((updated) => _.assign(interaction, updated))
                 },
                 openRedirect(uri: string) {
                     window.open(uri, '_blank')

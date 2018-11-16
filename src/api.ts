@@ -51,6 +51,21 @@ api.post('/aspsps/:aspspId/sessions', json(), (req, res) => {
     .catch((error) => res.status(500).send(inspect(error)))
 })
 
+api.post('/interactions/:interactionId/state', json(), (req, res) => {
+    const {interactionId} = req.params
+
+    const {state, event} = req.body
+    axios.post(`/interactions/${interactionId}/state`, {state, event},
+        {
+            baseURL,
+            headers: {
+                'x-tuatara-psu-id': req.user.username
+            }
+        })
+    .then(({data}) => res.send(data))
+    .catch((error) => res.status(500).send(inspect(error)))
+})
+
 const operationMap = {
     getAccounts: '/v2_1.1/accounts/v2_1.1/getAccounts',
     getAccount: '/v2_1.1/accounts/v2_1.1/getAccount',
@@ -67,7 +82,7 @@ api.post('/aspsps/:aspspId/call/:operation', json(), (req, res) => {
     const aspspId = req.params.aspspId
     const operation = req.params.operation
     const {session, payload} = req.body
-    axios.post(`/integration${operationMap[operation]}`, payload,{
+    axios.post(`/integration${operationMap[operation]}`, payload, {
         baseURL,
         headers: {
             'x-tuatara-psu-id': req.user.username,
