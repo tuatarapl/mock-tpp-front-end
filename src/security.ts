@@ -6,6 +6,7 @@ import {Strategy as LocalStrategy} from 'passport-local'
 import * as FileStore from 'session-file-store'
 export const security = Router()
 security.use(session({
+    name: 'front-end-session',
     secret: 'keyboard cat',
     store: new (FileStore(session))({
         secret: 'keyboard cat'
