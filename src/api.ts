@@ -23,16 +23,10 @@ api.get('/aspsps/:aspspId', (req, res) => {
                 'x-tuatara-psu-id': req.user.username,
                 'x-tuatara-aspsp-id': aspspId
             }
-        })/*,
-        axios.get(`/consent/internal/${aspspId}`, {
-            baseURL: 'http://localhost:3000',
-            headers: {
-                authorization: `Bearer ${token}`
-            }
-        })*/
+        })
     ])
-    .then(([{data: metadata}, {data: sessions}/*, {data: consent}*/]) =>
-        res.send({...metadata, sessions /*, requests, consent*/}))
+    .then(([{data: metadata}, {data: sessions}]) =>
+        res.send({...metadata, sessions}))
     .catch((error) => res.status(500).send(inspect(error)))
 })
 
@@ -45,6 +39,18 @@ api.post('/aspsps/:aspspId/sessions', json(), (req, res) => {
             headers: {
                 'x-tuatara-psu-id': req.user.username,
                 'x-tuatara-aspsp-id': aspspId
+            }
+        })
+    .then(({data}) => res.send(data))
+    .catch((error) => res.status(500).send(inspect(error)))
+})
+
+api.get('/interactions', json(), (req, res) => {
+    axios.get(`/interactions`,
+        {
+            baseURL,
+            headers: {
+                'x-tuatara-psu-id': req.user.username
             }
         })
     .then(({data}) => res.send(data))
