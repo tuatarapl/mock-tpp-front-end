@@ -22,6 +22,53 @@ function callAPI(aspspId, operation, session, payload) {
         ({response: response.data, operation}))
 }
 
+Vue.component('session-details', {
+    props: ['session'],
+    template: `
+<div class="card">
+    <div class="card-body">
+        <h3>{{session.identity.sessionId}}</h3>
+        <nav class="nav nav-tabs mb-4">
+            <a class="nav-link" :class="{active: active =='interactions'}" @click="active ='interactions'">
+                Interactions
+            </a>
+            <a class="nav-link" :class="{active: active =='requested'}" @click="active ='requested'">
+                Requested Consent
+            </a>
+            <a class="nav-link" :class="{active: active =='granted'}" @click="active ='granted'">
+                Granted Consent
+            </a>
+        </nav>
+        <ul v-if="active == 'interactions'">
+            <li v-for="interaction in session.interactions">
+                <span class="badge badge-pill badge-primary">{{interaction.state}}</span>
+                <a @click="executeInteraction(interaction)" href="#">Redirect</a>
+            </li>
+        </ul>
+        <consent-view :consent="session.sessionData.REQUESTED_CONSENT" v-if="active == 'requested'">
+        </consent-view>
+        <consent-view :consent="session.sessionData.GRANTED_CONSENT" v-if="active == 'granted'">
+        </consent-view>
+    </div>
+</div>
+    `,
+    data() {
+        return {
+            active: 'interactions'
+        }
+    },
+    methods: {
+        executeInteraction(interaction) {
+            this.openRedirect(interaction.redirectUri)
+            updateInteraction(interaction.interactionId,
+                'in_progress', 'PSU sent to ASPSP').then((updated) => _.assign(interaction, updated))
+        },
+        openRedirect(uri: string) {
+            window.open(uri, '_blank')
+        }
+    }
+})
+
 const consentTemplate = {
     scope: 'ais ais-accounts',
     scope_details: {
@@ -60,17 +107,8 @@ export const aspsp: RouteConfig = {
 <div class="row" >
     <div class="col-12" v-if="aspsp">
         <h1>{{aspsp.name}}</h1>
-        <ul class="list-group">
-            <li class="list-group-item" v-for="session in aspsp.sessions">
-                <h3>{{session.identity.sessionId}}</h3>
-                <ul class="list-group">
-                    <li class="list-group-item" v-for="interaction in session.interactions">
-                        <span class="badge badge-pill badge-primary">{{interaction.state}}</span>
-                        <a @click="executeInteraction(interaction)" href="#">Redirect</a>
-                    </li>
-                </ul>
-            </li>
-        </ul>
+        <session-details v-for="session in aspsp.sessions" :session="session" :key="session.identity.sessionId">
+        </session-details>
         <h3>New</h3>
         <form class="form-group">
             <div class="form-group">
@@ -112,14 +150,6 @@ export const aspsp: RouteConfig = {
                         this.newSessionName = '',
                         this.newSessionConsent = _.cloneDeep(consentTemplate)
                     })
-                },
-                executeInteraction(interaction) {
-                    this.openRedirect(interaction.redirectUri)
-                    updateInteraction(interaction.interactionId,
-                        'in_progress', 'PSU sent to ASPSP').then((updated) => _.assign(interaction, updated))
-                },
-                openRedirect(uri: string) {
-                    window.open(uri, '_blank')
                 }
             }
         })
