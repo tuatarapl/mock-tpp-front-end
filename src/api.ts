@@ -33,7 +33,7 @@ api.get('/aspsps/:aspspId', (req, res) => {
 api.post('/aspsps/:aspspId/sessions', json(), (req, res) => {
     const aspspId = req.params.aspspId
     const {kind, consent} = req.body
-    axios.post(`/session/${kind}`, consent,
+    axios.post(`/session/${kind}`, {REQUESTED_CONSENT: consent},
         {
             baseURL,
             headers: {
