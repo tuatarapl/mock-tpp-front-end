@@ -8,8 +8,8 @@ function get(id) {
     return axios.get(`/api/aspsps/${id}`).then((response) => response.data)
 }
 
-function createSession(aspspId, kind, consent) {
-    return axios.post(`/api/aspsps/${aspspId}/sessions`, {kind, consent}).then((response) => response.data)
+function createSession(aspspId, sessionId, consent) {
+    return axios.put(`/api/aspsps/${aspspId}/sessions/${sessionId}`, {consent}).then((response) => response.data)
 }
 
 function updateInteraction(interactionId, state, event) {

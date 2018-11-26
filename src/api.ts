@@ -30,10 +30,10 @@ api.get('/aspsps/:aspspId', (req, res) => {
     .catch((error) => res.status(500).send(inspect(error)))
 })
 
-api.post('/aspsps/:aspspId/sessions', json(), (req, res) => {
-    const aspspId = req.params.aspspId
-    const {kind, consent} = req.body
-    axios.post(`/session/${kind}`, {REQUESTED_CONSENT: consent},
+api.put('/aspsps/:aspspId/sessions/:sessionId', json(), (req, res) => {
+    const {aspspId, sessionId} = req.params
+    const {consent} = req.body
+    axios.post(`/session/${sessionId}`, {REQUESTED_CONSENT: consent, kind: 'polish-api-ais-redirect'},
         {
             baseURL,
             headers: {
