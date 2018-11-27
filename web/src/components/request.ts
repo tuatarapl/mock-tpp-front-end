@@ -11,7 +11,8 @@ const operationToComponent = {
     getHolds: 'get-transactions-request',
     getTransactionDetail: 'get-transaction-request',
     domestic: 'domestic-request',
-    EEA: 'eea-request'
+    EEA: 'eea-request',
+    nonEEA: 'non-eea-request'
 }
 
 Vue.component('edit-request', {

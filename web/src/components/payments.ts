@@ -205,6 +205,53 @@ Vue.component('recurrence-edit', {
     }
 })
 
+Vue.component('recipient-bank-request', {
+    props: ['request'],
+    template: `
+<div class="ml-4">
+    <template v-if="request.recipientBank">
+        <div class="form-group">
+            <label for="bicOrSwift">BIC or SWIFT</label>
+            <input type="text" class="form-control" id="bicOrSwift" v-model="request.recipientBank.bicOrSwift"/>
+        </div>
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" id="name" v-model="request.recipientBank.name"/>
+        </div>
+        <div class="form-group">
+            <label for="code">Code</label>
+            <input type="text" class="form-control" id="code" v-model="request.recipientBank.code"/>
+        </div>
+        <div class="form-group">
+            <label for="countryCode">Country Code</label>
+            <input type="text" class="form-control" id="countryCode" v-model="request.recipientBank.countryCode"/>
+        </div>
+        <div class="form-group">
+            <label for="address">Address</label>
+            <input type="text" class="form-control" id="address_0"
+                v-model="request.recipientBank.address[0]"/>
+            <input type="text" class="form-control" id="address_1"
+                v-model="request.recipientBank.address[1]"/>
+            <input type="text" class="form-control" id="address_2"
+                v-model="request.recipientBank.address[2]"/>
+            <input type="text" class="form-control" id="address_3"
+                v-model="request.recipientBank.address[3]"/>
+        </div>
+    </template>
+    <button type="button" class="btn btn-primary" @click="doInitialize()" v-else>
+        Initialize
+    </button>
+</div>
+`,
+    methods: {
+        doInitialize() {
+            Vue.set(this.request, 'recipientBank', {
+                address: []
+            })
+        }
+    }
+})
+
 Vue.component('transfer-data-request', {
     props: ['request'],
     template: `
@@ -321,6 +368,59 @@ Vue.component('eea-request', {
             <option>SEPA</option>
             <option>InstantSEPA</option>
             <option>Target</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="hold">Hold</label>
+        <input type="checkbox" class="form-control" id="hold" v-model="request.hold"/>
+    </div>
+    <div class="form-group">
+        <label for="executionMode">Execution Mode</label>
+        <select type="text" class="form-control" id="executionMode"
+            v-model="request.executionMode">
+            <option>Immediate</option>
+            <option>FutureDated</option>
+            <option>Recurring</option>
+        </select>
+    </div>
+</form>
+`
+})
+
+Vue.component('non-eea-request', {
+    props: ['request'],
+    template: `
+<form class="form-group">
+    <h2>Recipient</h2>
+    <recipient-pis-foreign-request :request="request"></recipient-pis-foreign-request>
+    <h2>Recipient Bank</h2>
+    <recipient-bank-request :request="request"></recipient-bank-request>
+    <h2>Sender</h2>
+    <sender-pis-foreign-request :request="request"></sender-pis-foreign-request>
+    <h2>Transfer Data</h2>
+    <transfer-data-request :request="request"></transfer-data-request>
+    <div class="form-group">
+        <label for="transferCharges">Transfer Charges</label>
+        <input type="text" class="form-control" id="transferCharges" v-model="request.transferCharges"/>
+    </div>
+    <div class="form-group">
+        <label for="tppTransactionId">Transaction Id</label>
+        <input type="text" class="form-control" id="tppTransactionId" v-model="request.tppTransactionId"/>
+    </div>
+    <div class="form-group">
+        <label for="deliveryMode">Delivery Mode</label>
+        <select type="text" class="form-control" id="deliveryMode"
+            v-model="request.deliveryMode">
+            <option>ExpressD0</option>
+            <option>UrgentD1</option>
+            <option>StandardD2</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="system">System</label>
+        <select type="text" class="form-control" id="system"
+            v-model="request.system">
+            <option>Swift</option>
         </select>
     </div>
     <div class="form-group">
