@@ -1,5 +1,6 @@
 import './getAccount'
 import './getAccounts'
+import './payments'
 import './request'
 import './results'
 import './transactions'
