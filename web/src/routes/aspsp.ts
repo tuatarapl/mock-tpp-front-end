@@ -219,7 +219,8 @@ export const aspsp: RouteConfig = {
             },
             methods: {
                 doCall() {
-                    callAPI(this.aspsp.aspspId, this.operation, this.session, _.pickBy(this.operationPayload))
+                    callAPI(this.aspsp.aspspId, this.operation.name, this.operation.session ? this.session : null,
+                        _.pickBy(this.operationPayload))
                         .then((response) => {
                             this.results = response
                             this.$refs.results.show()
