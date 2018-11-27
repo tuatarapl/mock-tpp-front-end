@@ -252,6 +252,62 @@ Vue.component('recipient-bank-request', {
     }
 })
 
+Vue.component('us-info-request', {
+    props: ['request'],
+    template: `
+<div class="ml-4">
+    <template v-if="request.usInfo">
+        <div class="form-group">
+            <label for="bicOrSwift">Payor Id</label>
+            <input type="text" class="form-control" id="bicOrSwift" v-model="request.usInfo.payerInfo.payorId"/>
+        </div>
+        <div class="form-group">
+            <label for="payorIdType">Payor Id< Type</label>
+            <select type="text" class="form-control" id="payorIdType"
+                v-model="request.usInfo.payerInfo.payorIdType">
+                <option>N</option>
+                <option>P</option>
+                <option>R</option>
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="formCode">Form Code</label>
+            <input type="text" class="form-control" id="formCode" v-model="request.usInfo.formCode"/>
+        </div>
+        <div class="form-group">
+            <label for="periodId">Period Id</label>
+            <input type="text" class="form-control" id="periodId" v-model="request.usInfo.periodId"/>
+        </div>
+        <div class="form-group">
+            <label for="periodType">Period Type</label>
+            <input type="text" class="form-control" id="periodType" v-model="request.usInfo.periodType"/>
+        </div>
+        <div class="form-group">
+            <label for="year">Year</label>
+            <input type="number" class="form-control" id="year" v-model.number="request.usInfo.year"/>
+        </div>
+        <div class="form-group">
+            <label for="obligationId">Obligation Id</label>
+            <input type="text" class="form-control" id="obligationId" v-model="request.usInfo.obligationId"/>
+        </div>
+    </template>
+    <button type="button" class="btn btn-primary" @click="doInitialize()" v-else>
+        Initialize
+    </button>
+</div>
+`,
+    methods: {
+        doInitialize() {
+            Vue.set(this.request, 'usInfo', {
+                payerInfo: {}
+            })
+        }
+    }
+})
+
 Vue.component('transfer-data-request', {
     props: ['request'],
     template: `
@@ -421,6 +477,55 @@ Vue.component('non-eea-request', {
         <select type="text" class="form-control" id="system"
             v-model="request.system">
             <option>Swift</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="hold">Hold</label>
+        <input type="checkbox" class="form-control" id="hold" v-model="request.hold"/>
+    </div>
+    <div class="form-group">
+        <label for="executionMode">Execution Mode</label>
+        <select type="text" class="form-control" id="executionMode"
+            v-model="request.executionMode">
+            <option>Immediate</option>
+            <option>FutureDated</option>
+            <option>Recurring</option>
+        </select>
+    </div>
+</form>
+`
+})
+
+Vue.component('tax-request', {
+    props: ['request'],
+    template: `
+<form class="form-group">
+    <h2>Recipient</h2>
+    <recipient-pis-request :request="request"></recipient-pis-request>
+    <h2>Sender</h2>
+    <sender-pis-domestic-request :request="request"></sender-pis-domestic-request>
+    <h2>Transfer Data</h2>
+    <transfer-data-request :request="request"></transfer-data-request>
+    <h2>Us Info</h2>
+    <us-info-request :request="request"></us-info-request>
+    <div class="form-group">
+        <label for="tppTransactionId">Transaction Id</label>
+        <input type="text" class="form-control" id="tppTransactionId" v-model="request.tppTransactionId"/>
+    </div>
+    <div class="form-group">
+        <label for="deliveryMode">Delivery Mode</label>
+        <select type="text" class="form-control" id="deliveryMode"
+            v-model="request.deliveryMode">
+            <option>ExpressD0</option>
+            <option>StandardD1</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="system">System</label>
+        <select type="text" class="form-control" id="system"
+            v-model="request.system">
+            <option>Elixir</option>
+            <option>ExpressElixir</option>
         </select>
     </div>
     <div class="form-group">
