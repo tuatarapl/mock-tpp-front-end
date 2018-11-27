@@ -10,7 +10,8 @@ const operationToComponent = {
     getTransactionsCancelled: 'get-transactions-request',
     getHolds: 'get-transactions-request',
     getTransactionDetail: 'get-transaction-request',
-    domestic: 'domestic-request'
+    domestic: 'domestic-request',
+    EEA: 'eea-request'
 }
 
 Vue.component('edit-request', {

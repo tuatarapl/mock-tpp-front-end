@@ -33,6 +33,33 @@ Vue.component('sender-pis-domestic-request', {
     }
 })
 
+Vue.component('sender-pis-foreign-request', {
+    props: ['request'],
+    template: `
+<div class="ml-4">
+    <template v-if="request.sender">
+        <div class="form-group">
+            <label for="accountNumber">Account Number</label>
+            <input type="text" class="form-control" id="accountNumber" v-model="request.sender.accountNumber"/>
+        </div>
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" id="name" v-model="request.sender.name"/>
+        </div>
+    </template>
+    <button type="button" class="btn btn-primary" @click="doInitialize()" v-else>
+        Initialize
+    </button>
+</div>
+`,
+    methods: {
+        doInitialize() {
+            Vue.set(this.request, 'sender', {
+            })
+        }
+    }
+})
+
 Vue.component('recipient-pis-request', {
     props: ['request'],
     template: `
@@ -65,6 +92,45 @@ Vue.component('recipient-pis-request', {
                 nameAddress: {
                     value: []
                 }
+            })
+        }
+    }
+})
+
+Vue.component('recipient-pis-foreign-request', {
+    props: ['request'],
+    template: `
+<div class="ml-4">
+    <template v-if="request.recipient">
+        <div class="form-group">
+            <label for="accountNumber">Account Number</label>
+            <input type="text" class="form-control" id="accountNumber" v-model="request.recipient.accountNumber"/>
+        </div>
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" id="name" v-model="request.recipient.name"/>
+        </div>
+        <div class="form-group">
+            <label for="address">Address</label>
+            <input type="text" class="form-control" id="address_0"
+                v-model="request.recipient.address[0]"/>
+            <input type="text" class="form-control" id="address_1"
+                v-model="request.recipient.address[1]"/>
+            <input type="text" class="form-control" id="address_2"
+                v-model="request.recipient.address[2]"/>
+            <input type="text" class="form-control" id="address_3"
+                v-model="request.recipient.address[3]"/>
+        </div>
+    </template>
+    <button type="button" class="btn btn-primary" @click="doInitialize()" v-else>
+        Initialize
+    </button>
+</div>
+`,
+    methods: {
+        doInitialize() {
+            Vue.set(this.request, 'recipient', {
+                address: []
             })
         }
     }
@@ -207,6 +273,54 @@ Vue.component('domestic-request', {
             <option>Sorbnet</option>
             <option>BlueCash</option>
             <option>Internal</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="hold">Hold</label>
+        <input type="checkbox" class="form-control" id="hold" v-model="request.hold"/>
+    </div>
+    <div class="form-group">
+        <label for="executionMode">Execution Mode</label>
+        <select type="text" class="form-control" id="executionMode"
+            v-model="request.executionMode">
+            <option>Immediate</option>
+            <option>FutureDated</option>
+            <option>Recurring</option>
+        </select>
+    </div>
+</form>
+`
+})
+
+Vue.component('eea-request', {
+    props: ['request'],
+    template: `
+<form class="form-group">
+    <h2>Recipient</h2>
+    <recipient-pis-foreign-request :request="request"></recipient-pis-foreign-request>
+    <h2>Sender</h2>
+    <sender-pis-foreign-request :request="request"></sender-pis-foreign-request>
+    <h2>Transfer Data</h2>
+    <transfer-data-request :request="request"></transfer-data-request>
+    <div class="form-group">
+        <label for="tppTransactionId">Transaction Id</label>
+        <input type="text" class="form-control" id="tppTransactionId" v-model="request.tppTransactionId"/>
+    </div>
+    <div class="form-group">
+        <label for="deliveryMode">Delivery Mode</label>
+        <select type="text" class="form-control" id="deliveryMode"
+            v-model="request.deliveryMode">
+            <option>ExpressD0</option>
+            <option>StandardD1</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="system">System</label>
+        <select type="text" class="form-control" id="system"
+            v-model="request.system">
+            <option>SEPA</option>
+            <option>InstantSEPA</option>
+            <option>Target</option>
         </select>
     </div>
     <div class="form-group">
