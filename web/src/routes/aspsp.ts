@@ -80,9 +80,22 @@ const consentTemplate = {
         consentId: 'ais-consent'
     }
 }
-const operations = ['getAccounts', 'getAccount', 'getTransactionsDone', 'getTransactionsPending',
-    'getTransactionsRejected', 'getTransactionsScheduled', 'getTransactionsCancelled', 'getHolds',
-    'getTransactionDetail']
+const operations = [
+    {name: 'getAccounts', session: true},
+    {name: 'getAccount', session: true},
+    {name: 'getTransactionsDone', session: true},
+    {name: 'getTransactionsPending', session: true},
+    {name: 'getTransactionsRejected', session: true},
+    {name: 'getTransactionsScheduled', session: true},
+    {name: 'getTransactionsCancelled', session: true},
+    {name: 'getHolds', session: true},
+    {name: 'getTransactionDetail', session: true},
+    {name: 'domestic', session: false},
+    {name: 'EEA', session: false},
+    {name: 'nonEEA', session: false},
+    {name: 'tax', session: false},
+    {name: 'bundle', session: false}
+]
 
 export const aspsp: RouteConfig = {
     path: 'aspsps/:aspspId',
@@ -165,16 +178,16 @@ export const aspsp: RouteConfig = {
             <div class="form-group">
                 <label for="operation">Operation</label>
                 <select class="form-control" id="operation" v-model="operation">
-                    <option v-for="o in operations">{{o}}</option>
+                    <option v-for="o in operations" v-bind:value="o">{{o.name}}</option>
                 </select>
             </div>
-            <div class="form-group">
+            <div class="form-group" v-if="operation && operation.session">
                 <label for="session">Session</label>
                 <select class="form-control" id="session" v-model="session">
                     <option v-for="session in aspsp.sessions">{{session.identity.sessionId}}</option>
                 </select>
             </div>
-            <edit-request :request="operationPayload" :operation="operation"></edit-request>
+            <edit-request :request="operationPayload" :operation="operation.name"></edit-request>
             <button type="button" class="btn btn-primary" @click="doCall()">Call</button>
         </form>
         <results-modal :results="results" ref="results"></results-modal>
