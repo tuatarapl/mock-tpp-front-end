@@ -10,7 +10,12 @@ const operationToComponent = {
     getTransactionsScheduled: 'get-transactions-result',
     getTransactionsCancelled: 'get-transactions-result',
     getHolds: 'get-holds-result',
-    getTransactionDetail: 'get-transaction-result'
+    getTransactionDetail: 'get-transaction-result',
+    domestic: 'session-results',
+    EEA: 'session-results',
+    nonEEA: 'session-results',
+    tax: 'session-results',
+    bundle: 'session-results'
 }
 
 Vue.component('generic-results', {
@@ -19,6 +24,13 @@ Vue.component('generic-results', {
 <div>
     {{data}}
 </div>
+`
+})
+
+Vue.component('session-results', {
+    props: ['data'],
+    template: `
+<session-details :session="data"></session-details>
 `
 })
 
