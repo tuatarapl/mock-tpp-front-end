@@ -88,13 +88,15 @@ api.post('/aspsps/:aspspId/call/:operation', json(), (req, res) => {
     const aspspId = req.params.aspspId
     const operation = req.params.operation
     const {session, payload} = req.body
+    const headers = {}
+    headers['x-tuatara-psu-id'] = req.user.username
+    headers['x-tuatara-aspsp-id'] = aspspId
+    if (session) {
+        headers['x-tuatara-session-id'] = session
+    }
     axios.post(`/integration${operationMap[operation]}`, payload, {
         baseURL,
-        headers: {
-            'x-tuatara-psu-id': req.user.username,
-            'x-tuatara-aspsp-id': aspspId,
-            'x-tuatara-session-id': session
-        }
+        headers
     })
     .then(({data}) => res.send(data))
     .catch((error) => res.status(500).send(inspect(error)))
