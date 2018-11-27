@@ -81,7 +81,12 @@ const operationMap = {
     getTransactionsScheduled: '/v2_1.1/accounts/v2_1.1/getTransactionsScheduled',
     getTransactionsCancelled: '/v2_1.1/accounts/v2_1.1/getTransactionsCancelled',
     getHolds: '/v2_1.1/accounts/v2_1.1/getHolds',
-    getTransactionDetail: '/v2_1.1/accounts/v2_1.1/getTransactionDetail'
+    getTransactionDetail: '/v2_1.1/accounts/v2_1.1/getTransactionDetail',
+    domestic: '/v2_1.1/payments/v2_1.1/domestic',
+    EEA: '/v2_1.1/payments/v2_1.1/EEA',
+    nonEEA: '/v2_1.1/payments/v2_1.1/nonEEA',
+    tax: '/v2_1.1/payments/v2_1.1/tax',
+    bundle: '/v2_1.1/payments/v2_1.1/bundle'
 }
 
 api.post('/aspsps/:aspspId/call/:operation', json(), (req, res) => {
