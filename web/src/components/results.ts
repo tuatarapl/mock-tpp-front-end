@@ -13,6 +13,15 @@ const operationToComponent = {
     getTransactionDetail: 'get-transaction-result'
 }
 
+Vue.component('generic-results', {
+    props: ['data'],
+    template: `
+<div>
+    {{data}}
+</div>
+`
+})
+
 Vue.component('show-results', {
     props: ['data'],
     template: `
@@ -22,7 +31,7 @@ Vue.component('show-results', {
 `,
     computed: {
         currentComponent(): string {
-            return operationToComponent[this.data.operation]
+            return operationToComponent[this.data.operation] || 'generic-results'
         }
     }
 })
