@@ -544,3 +544,84 @@ Vue.component('tax-request', {
 </form>
 `
 })
+
+Vue.component('transfers-request', {
+    props: ['list', 'operation'],
+    template: `
+<ul class="list-group">
+    <li v-for="(item, index) in list" class="list-group-item">
+        <edit-request :operation="operation" :request="item"></edit-request>
+        <button type="button" class="btn btn-primary" @click="doRemove(index)">
+            Remove
+        </button>
+    </li>
+    <li class="list-group-item">
+        <button type="button" class="btn btn-primary" @click="doAdd()">
+            Add
+        </button>
+    </li>
+</ul>
+`,
+    methods: {
+        doAdd() {
+            this.list.push({})
+        },
+        doRemove(index: number) {
+            this.list.splice(index, 1)
+        }
+    }
+})
+
+Vue.component('bundle-request', {
+    props: ['request'],
+    template: `
+<form class="form-group">
+    <div class="form-group">
+        <label for="tppBundleId">Bundle Id</label>
+        <input type="text" class="form-control" id="tppBundleId" v-model="request.tppBundleId"/>
+    </div>
+    <div class="form-group">
+        <label for="transfersTotalAmount">Transfers Total Amount</label>
+        <input type="text" class="form-control" id="transfersTotalAmount" v-model="request.transfersTotalAmount"/>
+    </div>
+    <div class="form-group">
+        <label for="typeOfTransfers">Type of Transfers</label>
+        <select type="text" class="form-control" id="typeOfTransfers"
+            v-model="request.typeOfTransfers" @change="changeType">
+            <option>domestic</option>
+            <option>EEA</option>
+            <option>nonEEA</option>
+            <option>tax</option>
+        </select>
+    </div>
+    <template v-if="request.domesticTransfers">
+        <h2>Domestic Transfers</h2>
+        <transfers-request class="mb-4" operation="domestic" :list="request.domesticTransfers">
+        </transfers-request>
+    </template>
+    <template v-if="request.EEATransfers">
+        <h2>EEA Transfers</h2>
+        <transfers-request class="mb-4" operation="EEA" :list="request.EEATransfers">
+        </transfers-request>
+    </template>
+    <template v-if="request.nonEEATransfers">
+        <h2>Non EEA Transfers</h2>
+        <transfers-request class="mb-4" operation="nonEEA" :list="request.nonEEATransfers">
+        </transfers-request>
+    </template>
+    <template v-if="request.taxTransfers">
+        <h2>Tax Transfers</h2>
+        <transfers-request  class="mb-4" operation="tax" :list="request.taxTransfers">
+        </transfers-request>
+    </template>
+</form>
+`,
+    methods: {
+        changeType(event) {
+            const listName = event.target.value + 'Transfers'
+            if (!this.request[listName]) {
+                Vue.set(this.request, listName, [])
+            }
+        }
+    }
+})

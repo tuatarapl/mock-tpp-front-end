@@ -13,7 +13,8 @@ const operationToComponent = {
     domestic: 'domestic-request',
     EEA: 'eea-request',
     nonEEA: 'non-eea-request',
-    tax: 'tax-request'
+    tax: 'tax-request',
+    bundle: 'bundle-request'
 }
 
 Vue.component('edit-request', {
