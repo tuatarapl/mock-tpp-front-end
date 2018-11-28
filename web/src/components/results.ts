@@ -15,7 +15,12 @@ const operationToComponent = {
     EEA: 'session-results',
     nonEEA: 'session-results',
     tax: 'session-results',
-    bundle: 'session-results'
+    bundle: 'session-results',
+    domesticResult: 'payment-result',
+    EEAResult: 'payment-result',
+    nonEEAResult: 'payment-result',
+    taxResult: 'payment-result',
+    bundleResult: 'bundle-result'
 }
 
 Vue.component('generic-results', {
@@ -53,7 +58,7 @@ Vue.component('result-header', {
 <dl class="row">
     <dt class="col-sm-3 col-md-1">Request Id</dt>
     <dd class="col-sm-9 col-md-4">{{header.requestId}}</dd>
-    <dt class="col-sm-3 col-md-1">Send Data</dt>
+    <dt class="col-sm-3 col-md-1">Send Date</dt>
     <dd class="col-sm-9 col-md-4">{{header.sendDate}}</dd>
     <dt class="col-sm-3 col-md-1">Is Callback</dt>
     <dd class="col-sm-9 col-md-1">{{header.isCallback}}</dd>

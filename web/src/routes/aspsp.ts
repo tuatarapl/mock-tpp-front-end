@@ -53,8 +53,8 @@ Vue.component('session-details', {
         </consent-view>
         <consent-view :consent="session.sessionData.GRANTED_CONSENT" v-if="active == 'granted'">
         </consent-view>
-        <div v-if="active == 'response'">
-            {{session.sessionData.response}}
+        <div v-if="active == 'response' && operation">
+            <show-results :data="{operation: operation, response: session.sessionData.response}"></show-results>
         </div>
     </div>
 </div>
@@ -72,6 +72,15 @@ Vue.component('session-details', {
         },
         openRedirect(uri: string) {
             window.open(uri, '_blank')
+        }
+    },
+    computed: {
+        operation(): string {
+            if (this.session.identity.sessionId.indexOf(':') > -1) {
+                return this.session.identity.sessionId.split(':')[0] + 'Result'
+            } else {
+                return null
+            }
         }
     }
 })
@@ -97,11 +106,11 @@ const operations = [
     {name: 'getTransactionsCancelled', session: true},
     {name: 'getHolds', session: true},
     {name: 'getTransactionDetail', session: true},
-    {name: 'domestic', session: false},
-    {name: 'EEA', session: false},
-    {name: 'nonEEA', session: false},
-    {name: 'tax', session: false},
-    {name: 'bundle', session: false}
+    {name: 'domestic', session: 'operation+transaction'},
+    {name: 'EEA', session: 'operation+transaction'},
+    {name: 'nonEEA', session: 'operation+transaction'},
+    {name: 'tax', session: 'operation+transaction'},
+    {name: 'bundle', session: 'operation+bundle'}
 ]
 
 export const aspsp: RouteConfig = {
@@ -127,7 +136,8 @@ export const aspsp: RouteConfig = {
 <div class="row" >
     <div class="col-12" v-if="aspsp">
         <h1>{{aspsp.name}}</h1>
-        <session-details v-for="session in aspsp.sessions" :session="session" :key="session.identity.sessionId">
+        <session-details v-for="session in aspsp.sessions" :session="session" :key="session.identity.sessionId" 
+            class="mt-4">
         </session-details>
         <h3>New</h3>
         <form class="form-group">
@@ -225,8 +235,19 @@ export const aspsp: RouteConfig = {
                 })
             },
             methods: {
+                determineSession(): string {
+                    switch (this.operation.session) {
+                        case 'operation': return this.operation.name
+                        case 'operation+transaction':
+                            return `${this.operation.name}:${this.operationPayload.tppTransactionId}`
+                        case 'operation+bundle':
+                            return `${this.operation.name}:${this.operationPayload.tppBundleId}`
+                        case true: return this.session
+                        default: return null
+                    }
+                },
                 doCall() {
-                    callAPI(this.aspsp.aspspId, this.operation.name, this.operation.session ? this.session : null,
+                    callAPI(this.aspsp.aspspId, this.operation.name, this.determineSession(),
                         _.pickBy(this.operationPayload))
                         .then((response) => {
                             this.results = response
