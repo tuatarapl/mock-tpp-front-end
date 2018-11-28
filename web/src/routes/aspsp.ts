@@ -38,6 +38,10 @@ Vue.component('session-details', {
             <a class="nav-link" :class="{active: active =='granted'}" @click="active ='granted'">
                 Granted Consent
             </a>
+            <a class="nav-link" :class="{active: active =='response'}" @click="active ='response'"
+                v-if="session.sessionData.response">
+                Response
+            </a>
         </nav>
         <ul v-if="active == 'interactions'">
             <li v-for="interaction in session.interactions">
@@ -49,6 +53,9 @@ Vue.component('session-details', {
         </consent-view>
         <consent-view :consent="session.sessionData.GRANTED_CONSENT" v-if="active == 'granted'">
         </consent-view>
+        <div v-if="active == 'response'">
+            {{session.sessionData.response}}
+        </div>
     </div>
 </div>
     `,
