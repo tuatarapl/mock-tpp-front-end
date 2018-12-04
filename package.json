@@ -1,7 +1,7 @@
 {
-  "name": "front-end",
+  "name": "mock-tpp-front-end",
   "version": "1.0.0",
-  "description": "",
+  "description": "Web UI of mock tpp used to test back end components",
   "main": "index.js",
   "scripts": {
     "test": "nyc mocha test/**/*.{ts,tsx}",
@@ -52,7 +52,7 @@
     "@types/session-file-store": "^1.2.0",
     "axios": "^0.18.0",
     "body-parser": "^1.18.3",
-    "express": "^5.0.0-alpha.6",
+    "express": "^5.0.0-alpha.7",
     "express-session": "^1.15.6",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
