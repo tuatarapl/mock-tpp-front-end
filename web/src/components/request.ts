@@ -10,11 +10,11 @@ const operationToComponent = {
     getTransactionsCancelled: 'get-transactions-request',
     getHolds: 'get-transactions-request',
     getTransactionDetail: 'get-transaction-request',
-    domestic: 'domestic-request',
-    EEA: 'eea-request',
-    nonEEA: 'non-eea-request',
-    tax: 'tax-request',
-    bundle: 'bundle-request'
+    domestic: 'domestic-transfer-edit',
+    EEA: 'foreign-transfer-eea-edit',
+    nonEEA: 'foreign-transfer-non-eea-edit',
+    tax: 'tax-transfer-edit',
+    bundle: 'bundle-transfers-edit'
 }
 
 Vue.component('edit-request', {
