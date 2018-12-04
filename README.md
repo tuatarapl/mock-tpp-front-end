@@ -6,5 +6,5 @@ Implemented as [Node.js](https://nodejs.org/en/) server application with [Vue.js
 # Functionality
 * User management and authentication
 * Showing list of ASPSPs defined in back end
-* Requesting and obtatining XS2A session with selected ASPSP
+* Requesting and obtaining XS2A session with selected ASPSP
 * Calling ASPSP operations through back-end
