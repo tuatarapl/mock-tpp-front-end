@@ -32,7 +32,7 @@
     ]
   },
   "author": "Grzegorz Abramczyk <grzegorz.abramczyk@tuatara.pl>",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "devDependencies": {
     "@types/body-parser": "^1.17.0",
     "@types/express-session": "^1.15.10",
