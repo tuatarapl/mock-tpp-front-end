@@ -17,7 +17,8 @@ const operationToComponent = {
     bundle: 'bundle-transfers-edit',
     getPayment: 'get-payment-edit',
     getBundle: 'get-bundle-edit',
-    getMultiplePayments: 'get-multiple-payments-edit'
+    getMultiplePayments: 'get-multiple-payments-edit',
+    cancelPayments: 'cancel-payments-edit'
 }
 
 Vue.component('edit-request', {

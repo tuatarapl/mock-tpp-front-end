@@ -113,7 +113,8 @@ const operations = [
     {name: 'bundle', session: 'operation+bundle'},
     {name: 'getPayment', session: false},
     {name: 'getBundle', session: false},
-    {name: 'getMultiplePayments', session: false}
+    {name: 'getMultiplePayments', session: false},
+    {name: 'cancelPayments', session: false}
 ]
 
 export const aspsp: RouteConfig = {

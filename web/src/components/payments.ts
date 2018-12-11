@@ -108,7 +108,7 @@ Vue.component('get-bundle-result', {
 </div>
 `})
 
-Vue.component('get-multiple-payments-result', {
+Vue.component('payments-result', {
     props: ['data'],
     template: `
 <div>
