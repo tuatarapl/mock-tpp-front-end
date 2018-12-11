@@ -39,3 +39,29 @@ Vue.component('bundle-result', {
     </dl>
 </div>
 `})
+
+Vue.component('get-payment-result', {
+    props: ['data'],
+    template: `
+<div>
+    <result-header :header="data.responseHeader"></result-header>
+    <dl class="row">
+        <template v-if="data.paymentId">
+            <dt class="col-sm-3">Payment Id</dt>
+            <dd class="col-sm-9">{{data.paymentId}}</dd>
+        </template>
+        <template v-if="data.generalStatus">
+            <dt class="col-sm-3">General Status</dt>
+            <dd class="col-sm-9">{{data.generalStatus}}</dd>
+        </template>
+        <template v-if="data.detailedStatus">
+            <dt class="col-sm-3">Detailed Status</dt>
+            <dd class="col-sm-9">{{data.detailedStatus}}</dd>
+        </template>
+        <template v-if="data.executionMode">
+            <dt class="col-sm-3">Execution Mode</dt>
+            <dd class="col-sm-9">{{data.executionMode}}</dd>
+        </template>
+    </dl>
+</div>
+`})

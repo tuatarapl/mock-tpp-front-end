@@ -14,7 +14,8 @@ const operationToComponent = {
     EEA: 'foreign-transfer-eea-edit',
     nonEEA: 'foreign-transfer-non-eea-edit',
     tax: 'tax-transfer-edit',
-    bundle: 'bundle-transfers-edit'
+    bundle: 'bundle-transfers-edit',
+    getPayment: 'get-payment-edit'
 }
 
 Vue.component('edit-request', {

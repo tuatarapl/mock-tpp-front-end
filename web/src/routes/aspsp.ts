@@ -110,7 +110,8 @@ const operations = [
     {name: 'EEA', session: 'operation+transaction'},
     {name: 'nonEEA', session: 'operation+transaction'},
     {name: 'tax', session: 'operation+transaction'},
-    {name: 'bundle', session: 'operation+bundle'}
+    {name: 'bundle', session: 'operation+bundle'},
+    {name: 'getPayment', session: false}
 ]
 
 export const aspsp: RouteConfig = {
