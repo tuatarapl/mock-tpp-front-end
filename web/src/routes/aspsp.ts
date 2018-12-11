@@ -111,7 +111,8 @@ const operations = [
     {name: 'nonEEA', session: 'operation+transaction'},
     {name: 'tax', session: 'operation+transaction'},
     {name: 'bundle', session: 'operation+bundle'},
-    {name: 'getPayment', session: false}
+    {name: 'getPayment', session: false},
+    {name: 'getBundle', session: false}
 ]
 
 export const aspsp: RouteConfig = {
@@ -199,7 +200,7 @@ export const aspsp: RouteConfig = {
                     <option v-for="o in operations" v-bind:value="o">{{o.name}}</option>
                 </select>
             </div>
-            <div class="form-group" v-if="operation && operation.session">
+            <div class="form-group" v-if="operation && operation.session === true">
                 <label for="session">Session</label>
                 <select class="form-control" id="session" v-model="session">
                     <option v-for="session in aspsp.sessions">{{session.identity.sessionId}}</option>

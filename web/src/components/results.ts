@@ -21,7 +21,8 @@ const operationToComponent = {
     nonEEAResult: 'payment-result',
     taxResult: 'payment-result',
     bundleResult: 'bundle-result',
-    getPayment: 'get-payment-result'
+    getPayment: 'get-payment-result',
+    getBundle: 'get-bundle-result'
 }
 
 Vue.component('generic-results', {
