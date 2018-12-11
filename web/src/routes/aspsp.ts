@@ -252,7 +252,7 @@ export const aspsp: RouteConfig = {
                 },
                 doCall() {
                     callAPI(this.aspsp.aspspId, this.operation.name, this.determineSession(),
-                        _.pickBy(this.operationPayload))
+                        _.pickBy(this.operationPayload, (value) => value !== undefined ))
                         .then((response) => {
                             this.results = response
                             this.$refs.results.show()
