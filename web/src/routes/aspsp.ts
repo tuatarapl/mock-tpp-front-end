@@ -106,10 +106,114 @@ const operations = [
     {name: 'getTransactionsCancelled', session: true},
     {name: 'getHolds', session: true},
     {name: 'getTransactionDetail', session: true},
-    {name: 'domestic', session: 'operation+transaction'},
-    {name: 'EEA', session: 'operation+transaction'},
-    {name: 'nonEEA', session: 'operation+transaction'},
-    {name: 'tax', session: 'operation+transaction'},
+    {name: 'domestic', session: 'operation+transaction', template: {
+            recipient: {
+                accountNumber: '<CHANGE ME>',
+                nameAddress: {
+                    value: ['<CHANGE ME>']
+                }
+            },
+            sender: {
+                accountNumber: '<CHANGE ME>',
+                nameAddress: {
+                    value: ['<CHANGE ME>']
+                }
+            },
+            transferData: {
+                description: '<CHANGE ME>',
+                amount: '0.00'
+            },
+            tppTransactionId: '<CHANGE ME>',
+            deliveryMode: 'StandardD1',
+            system: 'Elixir',
+            executionMode: 'Immediate'
+        }
+    },
+    {name: 'EEA', session: 'operation+transaction', template: {
+            recipient: {
+                accountNumber: '<CHANGE ME>',
+                name: '<CHANGE ME>',
+                address: ['<CHANGE ME>']
+            },
+            sender: {
+                accountNumber: '<CHANGE ME>',
+                nameAddress: {
+                    value: ['<CHANGE ME>']
+                }
+            },
+            transferData: {
+                description: '<CHANGE ME>',
+                amount: '0.00',
+                currency: 'EUR'
+            },
+            tppTransactionId: '<CHANGE ME>',
+            deliveryMode: 'StandardD1',
+            system: 'SEPA',
+            executionMode: 'Immediate'
+        }
+    },
+    {name: 'nonEEA', session: 'operation+transaction', template: {
+            recipient: {
+                accountNumber: '<CHANGE ME>',
+                name: '<CHANGE ME>',
+                address: ['<CHANGE ME>']
+            },
+            recipientBank: {
+                address: ['<CHANGE ME>']
+            },
+            sender: {
+                accountNumber: '<CHANGE ME>',
+                nameAddress: {
+                    value: ['<CHANGE ME>']
+                }
+            },
+            transferData: {
+                description: '<CHANGE ME>',
+                amount: '0.00',
+                currency: 'EUR'
+            },
+            transferCharges: 'XXX',
+            tppTransactionId: '<CHANGE ME>',
+            deliveryMode: 'StandardD2',
+            system: 'Swift',
+            executionMode: 'Immediate'
+        }
+    },
+    {name: 'tax', session: 'operation+transaction', template: {
+            recipient: {
+                accountNumber: '<CHANGE ME>',
+                nameAddress: {
+                    value: ['<CHANGE ME>']
+                }
+            },
+            sender: {
+                accountNumber: '<CHANGE ME>',
+                nameAddress: {
+                    value: ['<CHANGE ME>']
+                }
+            },
+            usInfo: {
+                payerInfo: {
+                    payorId: '<CHANGE ME>',
+                    payorIdType: 'N'
+                },
+                formCode: '<>',
+                periodId: '<>',
+                periodType: '<>',
+                year: 2000,
+                obligationId: '<CHANGE ME>'
+            },
+            transferData: {
+                description: '<CHANGE ME>',
+                amount: '0.00',
+                currency: 'PLN'
+            },
+            tppTransactionId: '<CHANGE ME>',
+            deliveryMode: 'StandardD1',
+            system: 'Elixir',
+            executionMode: 'Immediate'
+        }
+    },
     {name: 'bundle', session: 'operation+bundle'},
     {name: 'getPayment', session: false},
     {name: 'getBundle', session: false},
@@ -140,7 +244,7 @@ export const aspsp: RouteConfig = {
 <div class="row" >
     <div class="col-12" v-if="aspsp">
         <h1>{{aspsp.name}}</h1>
-        <session-details v-for="session in aspsp.sessions" :session="session" :key="session.identity.sessionId" 
+        <session-details v-for="session in aspsp.sessions" :session="session" :key="session.identity.sessionId"
             class="mt-4">
         </session-details>
         <h3>New</h3>
@@ -257,6 +361,13 @@ export const aspsp: RouteConfig = {
                             this.results = response
                             this.$refs.results.show()
                         })
+                }
+            },
+            watch: {
+                operation(newOperation) {
+                    if (newOperation.template) {
+                        this.operationPayload = _.cloneDeep(newOperation.template)
+                    }
                 }
             }
         })
