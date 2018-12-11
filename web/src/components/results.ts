@@ -22,7 +22,8 @@ const operationToComponent = {
     taxResult: 'payment-result',
     bundleResult: 'bundle-result',
     getPayment: 'get-payment-result',
-    getBundle: 'get-bundle-result'
+    getBundle: 'get-bundle-result',
+    getMultiplePayments: 'get-multiple-payments-result'
 }
 
 Vue.component('generic-results', {
