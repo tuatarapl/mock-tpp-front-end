@@ -86,7 +86,11 @@ const operationMap = {
     EEA: '/v2_1.1/payments/v2_1.1/EEA',
     nonEEA: '/v2_1.1/payments/v2_1.1/nonEEA',
     tax: '/v2_1.1/payments/v2_1.1/tax',
-    bundle: '/v2_1.1/payments/v2_1.1/bundle'
+    bundle: '/v2_1.1/payments/v2_1.1/bundle',
+    getPayment: '/v2_1.1/payments/v2_1.1/getPayment',
+    getBundle: '/v2_1.1/payments/v2_1.1/getBundle',
+    getMultiplePayments: '/v2_1.1/payments/v2_1.1/getMultiplePayments',
+    cancelPayments: '/v2_1.1/payments/v2_1.1/cancelPayments'
 }
 
 api.post('/aspsps/:aspspId/call/:operation', json(), (req, res) => {
