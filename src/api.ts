@@ -14,7 +14,6 @@ api.get('/aspsps', (req, res) => {
 
 api.get('/aspsps/:aspspId', (req, res) => {
     const aspspId = req.params.aspspId
-    const token = Buffer.from(JSON.stringify(req.user.username), 'UTF-8').toString('BAse64')
     Promise.all([
         axios.get(`/aspsps/${aspspId}`, {baseURL}),
         axios.get(`/session`, {
