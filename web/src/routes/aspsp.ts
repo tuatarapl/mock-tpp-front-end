@@ -285,7 +285,7 @@ export const aspsp: RouteConfig = {
                     createSession(this.aspsp.aspspId, this.newSessionName, this.newSessionConsent)
                     .then((newSession) => {
                         this.aspsp.sessions.push(newSession)
-                        this.newSessionName = '',
+                        this.newSessionName = ''
                         this.newSessionConsent = _.cloneDeep(consentTemplate)
                     })
                 }
