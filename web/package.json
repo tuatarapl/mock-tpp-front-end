@@ -10,7 +10,6 @@
   "author": "Grzegorz Abramczyk <grzegorz.abramczyk@tuatara.pl>",
   "license": "MIT",
   "dependencies": {
-    "@types/axios": "^0.14.0",
     "axios": "^0.18.0",
     "bootstrap": "^4.3.1",
     "css-loader": "^1.0.0",
@@ -31,9 +30,6 @@
     "@types/bootstrap": "^4.1.2",
     "@types/jquery": "^3.3.22",
     "@types/lodash": "^4.14.118",
-    "@types/moment": "^2.13.0",
-    "@types/vue": "^2.0.0",
-    "@types/vue-router": "^2.0.0",
     "node-sass": "^4.10.0",
     "sass-loader": "^7.1.0",
     "typescript": "^3.1.6"
