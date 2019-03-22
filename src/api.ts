@@ -38,7 +38,8 @@ api.put('/aspsps/:aspspId/sessions/:sessionId', json(), (req, res) => {
             baseURL,
             headers: {
                 'x-tuatara-psu-id': req.user.username,
-                'x-tuatara-aspsp-id': aspspId
+                'x-tuatara-aspsp-id': aspspId,
+                'x-tuatara-front-end': channel
             }
         })
     .then(({data}) => res.send(data))
