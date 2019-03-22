@@ -13,6 +13,11 @@ api.get('/aspsps', (req, res) => {
     .catch((error) => res.status(500).send(inspect(error)))
 })
 
+function fetchInteractions(psu: string, session: string) {
+    return axios.get(`/v2/channel/${channel}/psu/${psu}/interaction?context=session:${session}`, { baseURL})
+        .then(({data: interactions}) => interactions)
+}
+
 api.get('/aspsps/:aspspId', (req, res) => {
     const aspspId = req.params.aspspId
     Promise.all([
@@ -23,9 +28,11 @@ api.get('/aspsps/:aspspId', (req, res) => {
                 'x-tuatara-psu-id': req.user.username,
                 'x-tuatara-aspsp-id': aspspId
             }
-        })
+        }).then(({data: sessions}) => Promise.all(sessions.map(((session) =>
+            fetchInteractions(req.user.username, session.identity.sessionId)
+            .then(( interactions) => ( {...session, interactions}))))))
     ])
-    .then(([{data: metadata}, {data: sessions}]) =>
+    .then(([{data: metadata}, sessions]) =>
         res.send({...metadata, sessions}))
     .catch((error) => res.status(500).send(inspect(error)))
 })
@@ -42,7 +49,8 @@ api.put('/aspsps/:aspspId/sessions/:sessionId', json(), (req, res) => {
                 'x-tuatara-front-end': channel
             }
         })
-    .then(({data}) => res.send(data))
+    .then(({data: session}) => fetchInteractions(req.user.username, session.identity.sessionId)
+        .then((interactions) => res.send({...session, interactions})) )
     .catch((error) => res.status(500).send(inspect(error)))
 })
 
@@ -59,13 +67,8 @@ api.post('/interactions/:interactionId/state', json(), (req, res) => {
     const {interactionId} = req.params
 
     const {state, event} = req.body
-    axios.post(`/interactions/${interactionId}/state`, {state, event},
-        {
-            baseURL,
-            headers: {
-                'x-tuatara-psu-id': req.user.username
-            }
-        })
+    axios.patch(`/v2/channel/${channel}/psu/${req.user.username}/interaction/${interactionId}`,
+        {code: state, message: event}, {baseURL})
     .then(({data}) => res.send(data))
     .catch((error) => res.status(500).send(inspect(error)))
 })
@@ -98,6 +101,7 @@ api.post('/aspsps/:aspspId/call/:operation', json(), (req, res) => {
     const headers = {}
     headers['x-tuatara-psu-id'] = req.user.username
     headers['x-tuatara-aspsp-id'] = aspspId
+    headers['x-tuatara-front-end'] = channel
     if (session) {
         headers['x-tuatara-session-id'] = session
     }

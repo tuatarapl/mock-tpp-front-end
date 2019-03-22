@@ -66,8 +66,8 @@ Vue.component('session-details', {
     },
     methods: {
         executeInteraction(interaction) {
-            this.openRedirect(interaction.redirectUri)
-            updateInteraction(interaction.interactionId,
+            this.openRedirect(interaction.parameters.redirectUri)
+            updateInteraction(interaction.id,
                 'in_progress', 'PSU sent to ASPSP').then((updated) => _.assign(interaction, updated))
         },
         openRedirect(uri: string) {
