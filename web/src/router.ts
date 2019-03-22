@@ -61,20 +61,20 @@ const routes: RouteConfig[] = [{
       beforeRouteEnter(to, from, next) {
         interactions().then((data) => {
               next((vm: any) => {
-                  vm.interactions = _.filter(data, (interaction) => interaction.state === 'defined')
+                  vm.interactions = _.filter(data, (interaction) => interaction.status === 'DEFINED')
               })
           })
       },
       beforeRouteUpdate(to, from, next) {
         interactions().then((data) => {
-              this.interactions = _.filter(data, (interaction) => interaction.state === 'defined')
+              this.interactions = _.filter(data, (interaction) => interaction.status === 'DEFINED')
               next()
           })
       },
       methods: {
         executeInteraction(interaction) {
-            this.openRedirect(interaction.redirectUri)
-            updateInteraction(interaction.interactionId,
+            this.openRedirect(interaction.parameters.redirectUri)
+            updateInteraction(interaction.id,
                 'in_progress', 'PSU sent to ASPSP').then((updated) => _.assign(interaction, updated))
         },
         openRedirect(uri: string) {
