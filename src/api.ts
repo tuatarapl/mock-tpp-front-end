@@ -5,6 +5,7 @@ import { inspect } from 'util'
 export const api = Router()
 
 const baseURL = process.env.BACK_END_URL || 'http://localhost:8080'
+const channel =  process.env.CHANNEL || 'front-end'
 
 api.get('/aspsps', (req, res) => {
     axios.get('/aspsps', {baseURL})
@@ -45,12 +46,9 @@ api.put('/aspsps/:aspspId/sessions/:sessionId', json(), (req, res) => {
 })
 
 api.get('/interactions', json(), (req, res) => {
-    axios.get(`/interactions`,
+    axios.get(`/v2/channel/${channel}/psu/${req.user.username}/interaction`,
         {
-            baseURL,
-            headers: {
-                'x-tuatara-psu-id': req.user.username
-            }
+            baseURL
         })
     .then(({data}) => res.send(data))
     .catch((error) => res.status(500).send(inspect(error)))
